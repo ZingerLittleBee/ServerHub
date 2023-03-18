@@ -1287,6 +1287,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "listenfd"
+version = "1.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e0500463acd96259d219abb05dc57e5a076ef04b2db9a2112846929b5f174c96"
+dependencies = [
+ "libc",
+ "uuid",
+ "winapi",
+]
+
+[[package]]
 name = "local-channel"
 version = "0.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2095,6 +2106,9 @@ dependencies = [
 [[package]]
 name = "server-octopus"
 version = "0.1.0"
+dependencies = [
+ "server-octopus-api",
+]
 
 [[package]]
 name = "server-octopus-api"
@@ -2106,6 +2120,7 @@ dependencies = [
  "actix-web",
  "dotenvy",
  "entity",
+ "listenfd",
  "migration",
  "sea-orm",
  "serde",

@@ -1,6 +1,7 @@
 use std::env;
-use actix_web::{App, HttpRequest, HttpResponse, HttpServer, middleware, web, Error};
-use sea_orm::{Database, DatabaseConnection};
+use actix_web::{get, App, HttpRequest, HttpResponse, HttpServer, middleware, web, Error, Responder};
+use listenfd::ListenFd;
+use sea_orm::{Database, DatabaseConnection, SqlxSqliteConnector};
 use migration::{Migrator, MigratorTrait};
 
 #[derive(Debug, Clone)]
@@ -9,13 +10,13 @@ struct AppState {
 }
 
 #[get("/")]
-async fn list(req: HttpRequest, data: web::Data<AppState>) -> Result<HttpResponse, Error> {
-    Ok(HttpResponse::from(HttpResponse::Ok()))
+async fn list(req: HttpRequest, data: web::Data<AppState>) -> impl Responder {
+    "123"
 }
 
 #[get("/new")]
 async fn new(data: web::Data<AppState>) -> Result<HttpResponse, Error> {
-    Ok(HttpResponse::from(HttpResponse::Ok()))
+    Ok(HttpResponse::from(HttpResponse::NotFound()))
 }
 
 
@@ -27,9 +28,17 @@ async fn start() -> std::io::Result<()> {
     // get env vars
     dotenvy::dotenv().ok();
     let db_url = env::var("DATABASE_URL").expect("DATABASE_URL is not set in .env file");
+    let host = env::var("HOST").expect("HOST is not set in .env file");
+    let port = env::var("PORT").expect("PORT is not set in .env file");
+    let server_url = format!("{host}:{port}");
 
     // establish connection to database and apply migrations
     // -> create post table if not exists
+
+    // let dc = SqlxSqliteConnector::from_sqlx_sqlite_pool(SqlitePool::connect(&db_url).unwrap()
+    //     .await
+    //     .expect("Failed to connect to the database")).await.unwrap();
+
     let conn = Database::connect(&db_url).await.unwrap();
     Migrator::up(&conn, None).await.unwrap();
 
@@ -41,7 +50,6 @@ async fn start() -> std::io::Result<()> {
         App::new()
             .app_data(web::Data::new(state.clone()))
             .wrap(middleware::Logger::default()) // enable logger
-            .default_service(web::route().to(not_found))
             .configure(init)
     });
 
@@ -59,4 +67,12 @@ async fn start() -> std::io::Result<()> {
 fn init(cfg: &mut web::ServiceConfig) {
     cfg.service(list);
     cfg.service(new);
+}
+
+pub fn main() {
+    let result = start();
+
+    if let Some(err) = result.err() {
+        println!("Error: {err}");
+    }
 }

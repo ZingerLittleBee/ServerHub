@@ -6,3 +6,5 @@ edition = "2021"
 [workspace]
 members = [".", "api", "entity", "dao", "migration"]
 
+[dependencies]
+server-octopus-api = { path = "api" }
