@@ -1,6 +1,6 @@
 use sea_orm_migration::prelude::*;
-use super::m20220101_000001_create_users::Users;
-use super::m20230319_114805_create_roles::Roles;
+use crate::rbac::m20230319_114805_roles::Roles;
+use crate::rbac::m20230319_164717_permissions::Permissions;
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;
@@ -11,31 +11,34 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(UserRoles::Table)
+                    .table(RolePermissions::Table)
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(UserRoles::Id)
+                        ColumnDef::new(RolePermissions::Id)
                             .integer()
                             .not_null()
                             .auto_increment()
                             .primary_key(),
                     )
-                    .col(ColumnDef::new(UserRoles::UserId).uuid().not_null())
+                    .col(ColumnDef::new(RolePermissions::RoleId).uuid().not_null())
                     .foreign_key(ForeignKey::create()
-                        .name("fk-user_roles-user_id")
-                        .from(UserRoles::Table, UserRoles::UserId)
-                        .to(Users::Table, Users::Id)
-                        .on_delete(ForeignKeyAction::Cascade)
-                        .on_update(ForeignKeyAction::Cascade)
-                    )
-                    .col(ColumnDef::new(UserRoles::RoleId).string().not_null())
-                    .foreign_key(ForeignKey::create()
-                        .name("fk-user_roles-role_id")
-                        .from(UserRoles::Table, UserRoles::RoleId)
+                        .name("fk-role_permissions-role_id")
+                        .from(RolePermissions::Table, RolePermissions::RoleId)
                         .to(Roles::Table, Roles::Id)
                         .on_delete(ForeignKeyAction::Cascade)
                         .on_update(ForeignKeyAction::Cascade)
                     )
+                    .col(ColumnDef::new(RolePermissions::PermissionId).string().not_null())
+                    .foreign_key(ForeignKey::create()
+                        .name("fk-role_permissions-permission_id")
+                        .from(RolePermissions::Table, RolePermissions::PermissionId)
+                        .to(Permissions::Table, Permissions::Id)
+                        .on_delete(ForeignKeyAction::Cascade)
+                        .on_update(ForeignKeyAction::Cascade)
+                    )
+                    .col(ColumnDef::new(RolePermissions::CreatedAt).date_time())
+                    .col(ColumnDef::new(RolePermissions::UpdatedAt).date_time())
+                    .col(ColumnDef::new(RolePermissions::DeletedAt).date_time())
                     .to_owned(),
             )
             .await
@@ -43,16 +46,19 @@ impl MigrationTrait for Migration {
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         manager
-            .drop_table(Table::drop().table(UserRoles::Table).to_owned())
+            .drop_table(Table::drop().table(RolePermissions::Table).to_owned())
             .await
     }
 }
 
 /// Learn more at https://docs.rs/sea-query#iden
 #[derive(Iden)]
-enum UserRoles {
+enum RolePermissions {
     Table,
     Id,
-    UserId,
     RoleId,
+    PermissionId,
+    CreatedAt,
+    UpdatedAt,
+    DeletedAt
 }

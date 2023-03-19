@@ -3,6 +3,8 @@
 - Generate a new migration file
     ```sh
     cargo run -- migrate generate MIGRATION_NAME
+    # or
+    sea-orm-cli migrate generate MIGRATION_NAME
     ```
 - Apply all pending migrations
     ```sh
@@ -39,3 +41,10 @@
     ```sh
     cargo run -- status
     ```
+
+- Generating Entity Files
+    ```sh
+    sea-orm-cli generate entity -o entity/src
+    ```
+  
+  [Read More Generating Entity Files](https://www.sea-ql.org/SeaORM/docs/generate-entity/sea-orm-cli/)

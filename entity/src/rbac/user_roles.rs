@@ -9,6 +9,9 @@ pub struct Model {
     pub id: i32,
     pub user_id: String,
     pub role_id: String,
+    pub created_at: Option<String>,
+    pub updated_at: Option<String>,
+    pub deleted_at: Option<String>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

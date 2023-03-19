@@ -19,7 +19,7 @@ impl MigrationTrait for Migration {
                             .auto_increment()
                             .primary_key(),
                     )
-                    .col(ColumnDef::new(Roles::Title).string().not_null())
+                    .col(ColumnDef::new(Roles::Name).string().unique_key().not_null())
                     .col(ColumnDef::new(Roles::Description).string())
                     .col(ColumnDef::new(Roles::CreatedAt).date_time())
                     .col(ColumnDef::new(Roles::UpdatedAt).date_time())
@@ -41,7 +41,7 @@ impl MigrationTrait for Migration {
 pub(crate) enum Roles {
     Table,
     Id,
-    Title,
+    Name,
     Description,
     CreatedAt,
     UpdatedAt,
