@@ -32,13 +32,6 @@ async fn start() -> std::io::Result<()> {
     let port = env::var("PORT").expect("PORT is not set in .env file");
     let server_url = format!("{host}:{port}");
 
-    // establish connection to database and apply migrations
-    // -> create post table if not exists
-
-    // let dc = SqlxSqliteConnector::from_sqlx_sqlite_pool(SqlitePool::connect(&db_url).unwrap()
-    //     .await
-    //     .expect("Failed to connect to the database")).await.unwrap();
-
     let conn = Database::connect(&db_url).await.unwrap();
     Migrator::up(&conn, None).await.unwrap();
 
