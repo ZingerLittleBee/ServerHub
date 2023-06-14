@@ -1,3 +1,9 @@
 build/**
 dist/**
 .next/**
+node_modules
+
+# IDE
+.idea
+.vscode
+.history
