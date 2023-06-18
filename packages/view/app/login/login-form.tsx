@@ -20,6 +20,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
 import { Icons } from "@/components/icons"
+import {login} from "@/requests/auth/auth";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -59,21 +60,11 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
     },
   })
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log("submit", data)
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    })
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    console.log("submit", data.email, data.username, data.password)
     setIsLoading(true)
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
-
+    await login(data.email, data.username, data.password)
+    setIsLoading(false)
   }
 
   function onSwitchChange() {

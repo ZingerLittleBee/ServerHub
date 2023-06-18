@@ -15,6 +15,10 @@ export class UserService {
         });
     }
 
+    async getAllUsers(): Promise<User[]> {
+        return this.prisma.user.findMany();
+    }
+
     async createUser(data: CreateUserDto): Promise<User> {
         let user: Prisma.UserCreateInput = {
             email: data.email,

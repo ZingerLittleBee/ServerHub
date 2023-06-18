@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
 import { Icons } from "@/components/icons"
 import {useEffect} from "react";
+import {register} from "@/requests/auth/auth";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -38,29 +39,16 @@ const FormSchema = z.object({
 export function RegisterForm({ className, ...props }: UserAuthFormProps) {
   const router = useRouter()
 
-  const [isLoading, setIsLoading] = React.useState<boolean>()
-
-  useEffect(() => {
-    setIsLoading(false)
-  }, [])
+  const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   })
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
     setIsLoading(true)
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    })
+    await register(data.email, data.username, data.password)
+    setIsLoading(false)
   }
 
   return (

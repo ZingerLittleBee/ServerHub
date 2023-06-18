@@ -3,18 +3,11 @@ import {NextResponse} from "next/server";
 import * as process from "process";
 import {ResultUtil} from "@/utils/ResultUtil";
 
-export async function GET(request: Request) {
-  const cookieStore = cookies()
-  const token = cookieStore.get('token')
-
-  return NextResponse.json('Hello, Next.js!')
-}
-
-// sign-in
+// register
 export async function POST(req: Request) {
   const { username, email, password } = await req.json()
 
-  const res = await fetch(`${process.env.BASE_URL}/auth/login`, {
+  const res = await fetch(`${process.env.BASE_URL}/auth/register`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -24,13 +17,5 @@ export async function POST(req: Request) {
 
   const result= await res.json() as ResultUtil<{ token: string }>
 
-  if (result.success) {
-    return NextResponse.redirect('/dashboard', {
-      headers: {
-        'Set-Cookie': `token=${result.data.token}; Path=/; HttpOnly`,
-      },
-    })
-  } else {
-    return NextResponse.json(result)
-  }
+  return NextResponse.json(result)
 }

@@ -9,7 +9,7 @@ export class ResultUtil<T> implements Result<T> {
     message: string;
     success: boolean;
 
-    static ok<T>(data: T): Result<T> {
+    static ok<T>(data?: T): Result<T> {
         return {
             success: true,
             data,
