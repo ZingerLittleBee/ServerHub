@@ -4,6 +4,7 @@ import * as React from "react"
 import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import useSWR from "swr"
 import * as z from "zod"
 
 import { cn } from "@/lib/utils"
@@ -19,33 +20,38 @@ import {
 import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
 import { Icons } from "@/components/icons"
-import useSWR from "swr";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-const formSchema = z.object({
-  email: z.string().email({
-    message: "Please enter a valid email address.",
-  }),
-  username: z.string().min(4, {
-    message: "Username must be at least 4 characters.",
-  }),
-  password: z.string().min(8, {
-    message: "Password must be at least 8 characters.",
-  }),
-})
+const formSchema = z
+  .object({
+    email: z.string().email().trim(),
+    username: z.string().regex(/^[a-zA-Z_]+$/,{ message: 'Username must start with letter' }).trim(),
+    password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
+  })
+  .or(
+    z.object({
+      username: z.string().regex(/^[a-zA-Z].*$/, { message: 'Username must start with letter' }).trim(),
+      password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
+    })
+  ).or(
+    z.object({
+      email: z.string().email().trim(),
+      password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
+    })
+  )
 
 export function LoginForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isEmail, setIsEmail] = useState<boolean>(true)
 
-
-  const fetcher = (url: string) => fetch(url).then(r => r.json())
+  const fetcher = (url: string) => fetch(url).then((r) => r.json())
 
   const { data, error, isLoading: load } = useSWR("/login/api/", fetcher)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    shouldUnregister: false,
     defaultValues: {
       email: "",
       username: "",
@@ -55,10 +61,6 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
 
   function onSubmit(data: z.infer<typeof formSchema>) {
     console.log("submit", data)
-    setIsLoading(true)
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
     toast({
       title: "You submitted the following values:",
       description: (
@@ -67,35 +69,65 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
         </pre>
       ),
     })
+    setIsLoading(true)
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 3000)
+
+  }
+
+  function onSwitchChange() {
+    setIsEmail(!isEmail)
+    form.setValue("email", "")
+    form.setValue("username", "")
   }
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <div className="flex justify-center">
-        {
-          load ? <div>Loading...</div> : <div>{data}</div>
-        }
+        {load ? <div>Loading...</div> : <div>{data}</div>}
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">
-          <FormField
-            control={form.control}
-            name={isEmail ? "email" : "username"}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{isEmail ? "Email" : "Username"}</FormLabel>
-                <FormControl>
-                  <Input
-                    type={isEmail ? "email" : "text"}
-                    autoComplete={isEmail ? "email" : "username"}
-                    placeholder={isEmail ? "name@example.com" : ""}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {isEmail ? (
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      autoComplete="email"
+                      placeholder="name@example.com"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ) : (
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Username</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      autoComplete="username"
+                      placeholder=""
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
           <FormField
             control={form.control}
             name="password"
@@ -136,7 +168,7 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
         variant="outline"
         type="button"
         disabled={isLoading}
-        onClick={() => setIsEmail(!isEmail)}
+        onClick={onSwitchChange}
       >
         {isLoading ? (
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />

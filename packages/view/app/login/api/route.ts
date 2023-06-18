@@ -1,6 +1,9 @@
 import { cookies } from 'next/headers'
 import {NextResponse} from "next/server";
 import * as process from "process";
+import {ResultUtil} from "@/utils/ResultUtil";
+import {toast} from "@/components/ui/use-toast";
+import * as React from "react";
 
 export async function GET(request: Request) {
   const cookieStore = cookies()
@@ -21,5 +24,18 @@ export async function POST(req: Request) {
     body: JSON.stringify({ username, email, password }),
   })
 
-  return NextResponse.json(await res.json())
+  const result= await res.json() as ResultUtil<{ token: string }>
+
+  if (result.success) {
+    return NextResponse.redirect('/dashboard', {
+      headers: {
+        'Set-Cookie': `token=${result.data.token}; Path=/; HttpOnly`,
+      },
+    })
+  } else {
+    toast({
+      title: "Login Failed",
+    })
+    // return NextResponse.redirect('/login')
+  }
 }
