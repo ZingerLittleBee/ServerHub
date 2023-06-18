@@ -19,6 +19,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
 import { Icons } from "@/components/icons"
+import useSWR from "swr";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -37,6 +38,11 @@ const formSchema = z.object({
 export function LoginForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isEmail, setIsEmail] = useState<boolean>(true)
+
+
+  const fetcher = (url: string) => fetch(url).then(r => r.json())
+
+  const { data, error, isLoading: load } = useSWR("/login/api/", fetcher)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -65,6 +71,11 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
+      <div className="flex justify-center">
+        {
+          load ? <div>Loading...</div> : <div>{data}</div>
+        }
+      </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">
           <FormField
