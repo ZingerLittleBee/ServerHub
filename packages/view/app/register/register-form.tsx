@@ -19,7 +19,6 @@ import {
 import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
 import { Icons } from "@/components/icons"
-import {useEffect} from "react";
 import {register} from "@/requests/auth/auth";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}

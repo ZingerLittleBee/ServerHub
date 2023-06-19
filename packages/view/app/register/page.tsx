@@ -1,8 +1,4 @@
-import Image from "next/image";
 import Link from "next/link";
-import {cn} from "@/lib/utils";
-import {buttonVariants} from "@/components/ui/button";
-import {Command} from "lucide-react";
 import {RegisterForm} from "@/app/register/register-form";
 
 export default () => {

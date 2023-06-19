@@ -21,12 +21,11 @@ export class AuthService {
     }
     const user = await this.usersService.user(email ? { email } : { username });
     this.logger.log(`user: ${JSON.stringify(user)}`)
-    this.logger.debug(`pass: ${pass}, await bcrypt.compare(pass, user.password): ${await bcrypt.compare(pass, user!.password)}`)
     if (!user || !(await bcrypt.compare(pass, user.password))) {
         this.logger.warn(`user not found or password is incorrect`)
       throw new UnauthorizedException();
     }
-    const payload = { sub: user.id, username: user.username };
+    const payload = { userId: user.userId };
     return {
       access_token: await this.jwtService.signAsync(payload),
     };
