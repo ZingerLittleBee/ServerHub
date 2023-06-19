@@ -1,6 +1,5 @@
 import "@/styles/globals.css"
 import { Metadata } from "next"
-import { SWRConfig } from "swr"
 
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"

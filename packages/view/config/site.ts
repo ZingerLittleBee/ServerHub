@@ -24,8 +24,8 @@ export const siteConfig = {
       hide: true,
     },
     authentication: {
-      title: "Authentication",
-      href: "/authentication",
+      title: "Settings",
+      href: "/settings",
     },
   },
   links: {
