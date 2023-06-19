@@ -1,11 +1,13 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {Injectable, Logger, UnauthorizedException} from '@nestjs/common';
 import { UserService } from '@/user/user.service';
 import { JwtService } from '@nestjs/jwt';
-import { compare } from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 import {ConfigService} from "@nestjs/config";
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private usersService: UserService,
     private jwtService: JwtService,
@@ -14,12 +16,14 @@ export class AuthService {
 
   async signIn(pass: string, email?: string, username?: string) {
     if (!email && !username) {
+      this.logger.error('email or username is required')
       throw new UnauthorizedException();
     }
-    if (email) {
-    }
     const user = await this.usersService.user(email ? { email } : { username });
-    if (!user || !(await compare(pass, user.password))) {
+    this.logger.log(`user: ${JSON.stringify(user)}`)
+    this.logger.debug(`pass: ${pass}, await bcrypt.compare(pass, user.password): ${await bcrypt.compare(pass, user!.password)}`)
+    if (!user || !(await bcrypt.compare(pass, user.password))) {
+        this.logger.warn(`user not found or password is incorrect`)
       throw new UnauthorizedException();
     }
     const payload = { sub: user.id, username: user.username };
@@ -39,5 +43,10 @@ export class AuthService {
   getSaltRounds() {
     const saltRounds = this.configService.get('SALT_ROUNDS')
     return saltRounds ? parseInt(saltRounds) : 10
+  }
+
+  getJwtExpirationTime() {
+    const jwtExpirationTime = this.configService.get('JWT_EXPIRATION_TIME')
+    return jwtExpirationTime ? parseInt(jwtExpirationTime) : 86400
   }
 }

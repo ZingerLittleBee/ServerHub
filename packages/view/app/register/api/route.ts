@@ -15,7 +15,12 @@ export async function POST(req: Request) {
     body: JSON.stringify({ username, email, password }),
   })
 
-  const result= await res.json() as ResultUtil<{ token: string }>
+  const result= await res.json() as ResultUtil<any>
+
+  // if (result.success) {
+  //   console.log('req.url', req.url)
+  //   return NextResponse.rewrite(new URL('/login', request.url))
+  // }
 
   return NextResponse.json(result)
 }

@@ -21,6 +21,7 @@ import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
 import { Icons } from "@/components/icons"
 import {login} from "@/requests/auth/auth";
+import {useRouter} from "next/navigation";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -43,6 +44,7 @@ const formSchema = z
   )
 
 export function LoginForm({ className, ...props }: UserAuthFormProps) {
+  const router = useRouter()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isEmail, setIsEmail] = useState<boolean>(true)
 
@@ -63,7 +65,15 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
   async function onSubmit(data: z.infer<typeof formSchema>) {
     console.log("submit", data.email, data.username, data.password)
     setIsLoading(true)
-    await login(data.email, data.username, data.password)
+    const res = await login(data.password,data.email, data.username)
+    if (res?.success) {
+      router.push("/dashboard")
+    } else {
+      toast({
+        title: "Error",
+        description: res?.message,
+      })
+    }
     setIsLoading(false)
   }
 

@@ -43,11 +43,28 @@ export function RegisterForm({ className, ...props }: UserAuthFormProps) {
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
+    defaultValues: {
+      email: "",
+      username: "",
+      password: "",
+    }
   })
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setIsLoading(true)
-    await register(data.email, data.username, data.password)
+    const res = await register(data.email, data.username, data.password)
+    if (res.success) {
+      router.push("/login")
+      toast({
+        title: "Success!",
+        description: "Your account has been created.",
+      })
+    } else {
+      toast({
+        title: "Error!",
+        description: res.message,
+      })
+    }
     setIsLoading(false)
   }
 

@@ -1,9 +1,11 @@
-import {Body, Controller, Post, HttpCode, HttpStatus, Logger} from '@nestjs/common';
+import {Body, Controller, Post, HttpCode, HttpStatus, Logger, Res} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ResultUtil, Result } from '@/utils/ResultUtil';
 import { hash } from 'bcrypt';
 import {Prisma} from "@prisma/client";
 import {prismaErrorCodeExplain} from "@/utils/ErrorUtil";
+import { Response } from 'express'
+
 
 @Controller('auth')
 export class AuthController {
@@ -32,13 +34,16 @@ export class AuthController {
 
     @HttpCode(HttpStatus.OK)
     @Post('login')
-    async signIn(@Body() signInDto: Record<string, any>): Promise<Result<{token: string}>> {
+    async signIn(@Body() signInDto: Record<string, any>, @Res({passthrough: true}) res: Response) {
+        console.log('login controller')
         try {
-            const hashPass = await hash(signInDto.password, this.authService.getSaltRounds());
-            const res = await this.authService.signIn(hashPass,signInDto.email,signInDto.username);
-            return ResultUtil.ok({
-                token: res.access_token,
+            const result = await this.authService.signIn(signInDto.password,signInDto.email,signInDto.username);
+            res.cookie('access_token', result.access_token, {
+                httpOnly: true,
+                sameSite: 'strict',
+                expires: new Date(new Date().getTime() + this.authService.getJwtExpirationTime() * 1000),
             });
+            return res.status(200).json(ResultUtil.ok());
         } catch (e) {
             return ResultUtil.error(e.message);
         }
