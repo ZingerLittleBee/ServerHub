@@ -11,41 +11,64 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  userId    String   @unique @default(uuid())
-  createdAt DateTime @default(now())
-  email     String   @unique
-  username  String   @unique
-  password  String
-  profile   Profile?
-  role      Role     @default(USER)
-  clients   Client[]
+  id         Int      @id @default(autoincrement())
+  userId     String   @unique @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  email      String   @unique
+  username   String   @unique
+  password   String
+  profile    Profile?
+  role       Role     @default(USER)
+  clients    Client[]
 
   @@index([userId])
 }
 
 model Profile {
   id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  updated_at  DateTime @updatedAt
   name        String
   avatar      String?
   description String?
-  User        User     @relation(fields: [userId], references: [userId])
+  user        User     @relation(fields: [userId], references: [userId])
   userId      String   @unique
 }
 
 model Client {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  User      User     @relation(fields: [userId], references: [userId])
-  userId    String
+  id         Int      @id @default(autoincrement())
+  name       String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  status     Status   @default(INACTIVE)
+  device     Device?
+  user       User     @relation(fields: [userId], references: [userId])
+  userId     String
+}
+
+model Device {
+  id         Int      @id @default(autoincrement())
+  hostname   String?
+  kernel     String?
+  cpu_num    Int?
+  brand      String?
+  frequency  String?
+  vendor     String?
+  memory     String?
+  swap       String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  client     Client   @relation(fields: [clientId], references: [id])
+  clientId   Int      @unique
 }
 
 enum Role {
   USER
   ADMIN
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+  DISABLED
 }
