@@ -7,7 +7,7 @@ CREATE TYPE "Status" AS ENUM ('ACTIVE', 'INACTIVE', 'DISABLED');
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
-    "userId" TEXT NOT NULL,
+    "user_id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "email" TEXT NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE "Profile" (
     "name" TEXT NOT NULL,
     "avatar" TEXT,
     "description" TEXT,
-    "userId" TEXT NOT NULL,
+    "user_id" TEXT NOT NULL,
 
     CONSTRAINT "Profile_pkey" PRIMARY KEY ("id")
 );
@@ -33,11 +33,12 @@ CREATE TABLE "Profile" (
 -- CreateTable
 CREATE TABLE "Client" (
     "id" SERIAL NOT NULL,
+    "client_id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "status" "Status" NOT NULL DEFAULT 'INACTIVE',
-    "userId" TEXT NOT NULL,
+    "user_id" INTEGER NOT NULL,
 
     CONSTRAINT "Client_pkey" PRIMARY KEY ("id")
 );
@@ -55,13 +56,13 @@ CREATE TABLE "Device" (
     "swap" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
-    "clientId" INTEGER NOT NULL,
+    "client_id" INTEGER NOT NULL,
 
     CONSTRAINT "Device_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_userId_key" ON "User"("userId");
+CREATE UNIQUE INDEX "User_user_id_key" ON "User"("user_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
@@ -70,19 +71,19 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- CreateIndex
-CREATE INDEX "User_userId_idx" ON "User"("userId");
+CREATE UNIQUE INDEX "Profile_user_id_key" ON "Profile"("user_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Profile_userId_key" ON "Profile"("userId");
+CREATE UNIQUE INDEX "Client_client_id_key" ON "Client"("client_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Device_clientId_key" ON "Device"("clientId");
+CREATE UNIQUE INDEX "Device_client_id_key" ON "Device"("client_id");
 
 -- AddForeignKey
-ALTER TABLE "Profile" ADD CONSTRAINT "Profile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Profile" ADD CONSTRAINT "Profile_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("user_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Client" ADD CONSTRAINT "Client_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Client" ADD CONSTRAINT "Client_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Device" ADD CONSTRAINT "Device_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "Client"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Device" ADD CONSTRAINT "Device_client_id_fkey" FOREIGN KEY ("client_id") REFERENCES "Client"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

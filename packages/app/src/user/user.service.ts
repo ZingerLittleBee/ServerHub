@@ -19,7 +19,7 @@ export class UserService {
     async getOneByUserId(userId: string) {
         const val =  await this.prisma.user.findUnique({
             where: {
-                userId: userId
+                user_id: userId
             }
         })
         return {

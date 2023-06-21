@@ -25,7 +25,7 @@ export class AuthService {
         this.logger.warn(`user not found or password is incorrect`)
       throw new UnauthorizedException();
     }
-    const payload = { userId: user.userId };
+    const payload = { userId: user.user_id };
     return {
       access_token: await this.jwtService.signAsync(payload),
     };

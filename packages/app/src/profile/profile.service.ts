@@ -3,7 +3,6 @@ import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import {PrismaService} from "@/db/prisma.service";
 import {ProfileVo} from "@/profile/vo/profile.vo";
-import {UserVo} from "@/user/vo/user.vo";
 import {UserService} from "@/user/user.service";
 
 @Injectable()
@@ -14,7 +13,7 @@ export class ProfileService {
   async getOneByUserId(userId: string) {
     const val =  await this.prisma.profile.findUnique({
         where: {
-            userId
+            user_id: userId
         }
     })
     return {

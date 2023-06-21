@@ -8,9 +8,14 @@ import { AuthModule } from './auth/auth.module';
 import {ConfigModule} from "@nestjs/config";
 import { ProfileModule } from './profile/profile.module';
 import { InfluxModule } from './influx/influx.module';
+import { DevtoolsModule } from '@nestjs/devtools-integration';
 
 @Module({
-  imports: [DbModule, UserModule, ClientModule, AuthModule,
+  imports: [
+    DevtoolsModule.register({
+      http: process.env.NODE_ENV !== 'production'
+    }),
+      DbModule, UserModule, ClientModule, AuthModule,
     ConfigModule.forRoot({
       isGlobal: true
     }),
