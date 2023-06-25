@@ -41,8 +41,13 @@ export class AuthController {
             res.cookie('access_token', result.access_token, {
                 httpOnly: true,
                 sameSite: 'strict',
-                expires: new Date(new Date().getTime() + this.authService.getJwtExpirationTime() * 1000),
+                expires: new Date(new Date().getTime() + this.authService.getJwtAccessExpirationTime() * 1000),
             });
+            res.cookie('refresh_token', result.refresh_token, {
+                httpOnly: true,
+                sameSite: 'strict',
+                expires: new Date(new Date().getTime() + this.authService.getJwtRefreshExpirationTime() * 1000)
+            })
             return res.status(200).json(ResultUtil.ok());
         } catch (e) {
             return ResultUtil.error(e.message);

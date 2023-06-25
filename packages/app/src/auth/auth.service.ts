@@ -28,6 +28,7 @@ export class AuthService {
     const payload = { userId: user.user_id };
     return {
       access_token: await this.jwtService.signAsync(payload),
+      refresh_token: await this.jwtService.signAsync(payload)
     };
   }
 
@@ -44,8 +45,19 @@ export class AuthService {
     return saltRounds ? parseInt(saltRounds) : 10
   }
 
-  getJwtExpirationTime() {
+  /**
+   * unit seconds from .env
+   */
+  getJwtAccessExpirationTime() {
     const jwtExpirationTime = this.configService.get('JWT_EXPIRATION_TIME')
     return jwtExpirationTime ? parseInt(jwtExpirationTime) : 86400
+  }
+
+  /**
+   * unit seconds from .env
+   */
+  getJwtRefreshExpirationTime() {
+    const jwtRefreshExpirationTime = this.configService.get('JWT_REFRESH_EXPIRATION_TIME')
+    return jwtRefreshExpirationTime ? parseInt(jwtRefreshExpirationTime) : 86400 * 6
   }
 }

@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser';
+import helmet from "helmet";
 
 
 async function bootstrap() {
@@ -8,6 +9,7 @@ async function bootstrap() {
     snapshot: true,
     logger: ['error', 'warn', 'log', 'debug', 'verbose'],
   });
+  app.use(helmet());
   app.use(cookieParser());
   app.enableCors({
     origin: 'http://localhost:3000',
