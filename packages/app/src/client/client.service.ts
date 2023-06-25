@@ -5,6 +5,13 @@ import { InfluxService } from '@/influx/influx.service';
 import { PrismaService } from '@/db/prisma.service';
 import { Prisma } from '@prisma/client';
 import {StatusEnum} from "@/enums/status.enum";
+import {InjectRedis} from "@liaoliaots/nestjs-redis";
+import Redis from "ioredis";
+import {JwtService} from "@nestjs/jwt";
+import {ConfigService} from "@nestjs/config";
+import {kClientAccessExpireTime} from "@/utils/JwtUtil";
+import {JwtUtilService} from "@/utils/jwt.util.service";
+import {Result, ResultUtil} from "@/utils/ResultUtil";
 
 @Injectable()
 export class ClientService {
@@ -13,40 +20,59 @@ export class ClientService {
   constructor(
     private readonly influxService: InfluxService,
     private readonly prismaService: PrismaService,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+    private readonly jwtUtilService: JwtUtilService,
+    @InjectRedis() private readonly redis: Redis
   ) {}
 
-  async registerClient(client: CreateClientDto) {
+  async registerClient(client: CreateClientDto): Promise<Result<{ token?: string }>> {
     // if `clientId` not empty, already registered before.
     // just update `status` and `device` field, if it has.
     if (client.clientId) {
       this.logger.verbose(`clientId: ${client.clientId} already registered before`)
-      const rawClient = await this.prismaService.client.findUnique({
-        where: {
-          client_id: client.clientId
-        },
-        include: {
-          device: true
-        }
-      })
-      this.logger.verbose(`clientId: ${client.clientId}, query client data: ${rawClient}`)
-      if (rawClient) {
-        let newClient: UpdateClientDto = {
-          name: client.name ?? rawClient.name,
-          userId: client.userId ?? rawClient.user_id,
-        }
-        if (client.device && rawClient.device) {
-          let { id, created_at, updated_at, client_id, ...other } = rawClient.device
-          newClient.device = { ...other, ...client.device }
-        }
-        this.logger.verbose(`clientId: ${newClient.clientId}, update client data: ${newClient}`)
-        await this.update(newClient)
-      } else {
-        this.logger.error(`clientId: ${client.clientId} not found`)
-        return false
-      }
+      return this.mergeClient(client)
     } else {
-      this.logger.verbose(`new client: ${client}`)
-      await this.create(client)
+      const clientId = await this.create(client)
+      this.logger.verbose(`new client, id: ${clientId}, info: ${client}`)
+      const token = await this.jwtService.signAsync({
+        clientId: clientId
+      })
+      this.redis.set(clientId, token, 'EX', this.jwtUtilService.getClientAccessExpireTime())
+      return {
+        success: true,
+        data: {
+          token
+        }
+      }
+    }
+  }
+
+  private async mergeClient(client: CreateClientDto): Promise<Result<any>> {
+    const rawClient = await this.prismaService.client.findUnique({
+      where: {
+        client_id: client.clientId
+      },
+      include: {
+        device: true
+      }
+    })
+    this.logger.verbose(`clientId: ${client.clientId}, query client data: ${rawClient}`)
+    if (rawClient) {
+      let newClient: UpdateClientDto = {
+        name: client.name ?? rawClient.name,
+        userId: client.userId ?? rawClient.user_id,
+      }
+      if (client.device && rawClient.device) {
+        let { id, created_at, updated_at, client_id, ...other } = rawClient.device
+        newClient.device = { ...other, ...client.device }
+      }
+      this.logger.verbose(`clientId: ${newClient.clientId}, update client data: ${newClient}`)
+      await this.update(newClient)
+        return ResultUtil.ok()
+    } else {
+      this.logger.warn(`clientId: ${client.clientId} not found`)
+      return ResultUtil.error(`client not found`)
     }
   }
 
@@ -103,6 +129,7 @@ export class ClientService {
         },
       } as Prisma.ClientCreateInput,
     });
+    this.logger.verbose(`client: ${client} created`)
     return client.client_id
   }
 

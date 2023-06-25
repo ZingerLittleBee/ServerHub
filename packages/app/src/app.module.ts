@@ -5,17 +5,28 @@ import {DbModule} from "./db/db.module";
 import {UserModule} from "./user/user.module";
 import { ClientModule } from './client/client.module';
 import { AuthModule } from './auth/auth.module';
-import {ConfigModule} from "@nestjs/config";
+import {ConfigModule, ConfigService} from "@nestjs/config";
 import { ProfileModule } from './profile/profile.module';
 import { InfluxModule } from './influx/influx.module';
-import { DevtoolsModule } from '@nestjs/devtools-integration';
+import {RedisModule, RedisModuleOptions} from "@liaoliaots/nestjs-redis";
+import {UtilModule} from "@/utils/util.module";
 
 @Module({
   imports: [
-    DevtoolsModule.register({
-      http: process.env.NODE_ENV !== 'production'
+    RedisModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory:  (config: ConfigService) => {
+          return {
+            readyLog: true,
+            config: {
+                host: config.get('REDIS_HOST'),
+                port: config.get('REDIS_PORT'),
+            }
+          } as RedisModuleOptions
+        }
     }),
-      DbModule, UserModule, ClientModule, AuthModule,
+      DbModule, UserModule, ClientModule, AuthModule, UtilModule,
     ConfigModule.forRoot({
       isGlobal: true
     }),

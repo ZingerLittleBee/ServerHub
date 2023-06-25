@@ -16,13 +16,14 @@ export class ClientController {
   constructor(private readonly clientService: ClientService) {}
 
   @Post('register')
-  async register(@Body() createClientDto: CreateClientDto): Promise<Result<any>> {
-    const res = await this.clientService.registerClient(createClientDto);
-    return res
-      ? ResultUtil.ok()
-      : ResultUtil.error(
-          'Register client failed, Please check your config in .env file.',
-        );
+  async register(@Body() createClientDto: CreateClientDto): Promise<Result<{token?: string}>> {
+    return this.clientService.registerClient(createClientDto);
+  }
+
+  // add data to influxdb
+  @Post('data')
+  async data(@Body() data: any) {
+
   }
 
   @Get()

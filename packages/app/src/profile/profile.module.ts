@@ -3,9 +3,10 @@ import { ProfileService } from './profile.service';
 import { ProfileController } from './profile.controller';
 import {DbModule} from "@/db/db.module";
 import {UserModule} from "@/user/user.module";
+import {JwtModule} from "@nestjs/jwt";
 
 @Module({
-  imports: [DbModule, UserModule],
+  imports: [JwtModule.register({}), DbModule, UserModule],
   controllers: [ProfileController],
   providers: [ProfileService]
 })
