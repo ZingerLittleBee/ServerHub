@@ -17,7 +17,14 @@ export class ClientController {
 
   @Post('register')
   async register(@Body() createClientDto: CreateClientDto): Promise<Result<{token?: string}>> {
-    return this.clientService.registerClient(createClientDto);
+    try {
+      const token = await this.clientService.registerClient(createClientDto);
+      return ResultUtil.ok({
+        token
+      })
+    } catch (e) {
+      return ResultUtil.error(e.message)
+    }
   }
 
   // add data to influxdb

@@ -26,12 +26,12 @@ export class ClientService {
     @InjectRedis() private readonly redis: Redis
   ) {}
 
-  async registerClient(client: CreateClientDto): Promise<Result<{ token?: string }>> {
+  async registerClient(client: CreateClientDto) {
     // if `clientId` not empty, already registered before.
     // just update `status` and `device` field, if it has.
     if (client.clientId) {
       this.logger.verbose(`clientId: ${client.clientId} already registered before`)
-      return this.mergeClient(client)
+      await this.mergeClient(client)
     } else {
       const clientId = await this.create(client)
       this.logger.verbose(`new client, id: ${clientId}, info: ${client}`)
@@ -39,16 +39,11 @@ export class ClientService {
         clientId: clientId
       })
       this.redis.set(clientId, token, 'EX', this.jwtUtilService.getClientAccessExpireTime())
-      return {
-        success: true,
-        data: {
-          token
-        }
-      }
+      return token
     }
   }
 
-  private async mergeClient(client: CreateClientDto): Promise<Result<any>> {
+  private async mergeClient(client: CreateClientDto) {
     const rawClient = await this.prismaService.client.findUnique({
       where: {
         client_id: client.clientId
@@ -69,10 +64,9 @@ export class ClientService {
       }
       this.logger.verbose(`clientId: ${newClient.clientId}, update client data: ${newClient}`)
       await this.update(newClient)
-        return ResultUtil.ok()
     } else {
-      this.logger.warn(`clientId: ${client.clientId} not found`)
-      return ResultUtil.error(`client not found`)
+      this.logger.error(`clientId: ${client.clientId} not found`)
+      throw new Error(`Client not found`)
     }
   }
 
