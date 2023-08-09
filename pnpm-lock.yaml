@@ -40,7 +40,7 @@ importers:
         version: 10.0.2(@nestjs/common@10.0.2)(@nestjs/core@10.0.2)
       '@server-octopus/shared':
         specifier: 1.0.1
-        version: link:../shared
+        version: 1.0.1
       bcrypt:
         specifier: ^5.1.0
         version: 5.1.0
@@ -65,7 +65,7 @@ importers:
         version: 10.0.2(@nestjs/common@10.0.2)(@nestjs/core@10.0.2)(@nestjs/microservices@10.0.5)(@nestjs/platform-express@10.0.2)
       '@server-octopus/types':
         specifier: 1.0.1
-        version: link:../types
+        version: 1.0.1
       '@types/bcrypt':
         specifier: ^5.0.0
         version: 5.0.0
@@ -149,7 +149,7 @@ importers:
         version: 10.0.3(@nestjs/common@10.0.2)(@nestjs/core@10.0.2)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@server-octopus/shared':
         specifier: 1.0.1
-        version: link:../shared
+        version: 1.0.1
       cookie-parser:
         specifier: ^1.4.6
         version: 1.4.6
@@ -174,7 +174,7 @@ importers:
         version: 10.0.2(@nestjs/common@10.0.2)(@nestjs/core@10.0.2)(@nestjs/microservices@10.0.5)(@nestjs/platform-express@10.0.2)
       '@server-octopus/types':
         specifier: 1.0.1
-        version: link:../types
+        version: 1.0.1
       '@types/cookie-parser':
         specifier: ^1.4.3
         version: 1.4.3
@@ -267,7 +267,7 @@ importers:
         version: 0.0.7(ts-node@10.9.1)
       '@server-octopus/shared':
         specifier: 1.0.1
-        version: link:../shared
+        version: 1.0.1
       '@webtre/nestjs-mailer-react-adapter':
         specifier: ^0.0.9
         version: 0.0.9(@nestjs-modules/mailer@1.9.1)
@@ -295,7 +295,7 @@ importers:
         version: 10.0.2(@nestjs/common@10.0.2)(@nestjs/core@10.0.2)(@nestjs/microservices@10.0.5)(@nestjs/platform-express@10.0.2)
       '@server-octopus/types':
         specifier: 1.0.1
-        version: link:../types
+        version: 1.0.1
       '@types/express':
         specifier: ^4.17.17
         version: 4.17.17
@@ -425,10 +425,10 @@ importers:
         version: 10.0.2(@nestjs/common@10.0.2)(@nestjs/core@10.0.2)(@nestjs/microservices@10.0.5)(@nestjs/platform-express@10.0.2)
       '@server-octopus/shared':
         specifier: 1.0.1
-        version: link:../shared
+        version: 1.0.1
       '@server-octopus/types':
         specifier: 1.0.1
-        version: link:../types
+        version: 1.0.1
       '@types/cookie-parser':
         specifier: ^1.4.3
         version: 1.4.3
@@ -484,8 +484,8 @@ importers:
         specifier: ^6.1.3
         version: 6.3.3
       ts-jest:
-        specifier: 28.0.5
-        version: 28.0.5(@babel/core@7.22.9)(jest@28.1.2)(typescript@4.9.5)
+        specifier: 28.0.8
+        version: 28.0.8(@babel/core@7.22.9)(jest@28.1.2)(typescript@4.9.5)
       ts-loader:
         specifier: ^9.2.3
         version: 9.4.3(typescript@4.9.5)(webpack@5.88.2)
@@ -512,7 +512,7 @@ importers:
         version: 10.0.2(@nestjs/common@10.1.3)(@nestjs/core@10.1.3)
       '@server-octopus/types':
         specifier: 1.0.1
-        version: link:../types
+        version: 1.0.1
       '@types/express':
         specifier: ^4.17.17
         version: 4.17.17
@@ -556,8 +556,8 @@ importers:
         specifier: ^6.1.3
         version: 6.3.3
       ts-jest:
-        specifier: 28.0.5
-        version: 28.0.5(@babel/core@7.22.9)(jest@28.1.2)(typescript@4.9.5)
+        specifier: 28.0.8
+        version: 28.0.8(@babel/core@7.22.9)(jest@28.1.2)(typescript@4.9.5)
       ts-loader:
         specifier: ^9.2.3
         version: 9.4.3(typescript@4.9.5)(webpack@5.88.2)
@@ -602,7 +602,7 @@ importers:
         version: 5.1.1(prisma@5.1.1)
       '@server-octopus/shared':
         specifier: 1.0.1
-        version: link:../shared
+        version: 1.0.1
       bcrypt:
         specifier: ^5.1.0
         version: 5.1.0
@@ -633,7 +633,7 @@ importers:
         version: 10.0.2(@nestjs/common@10.0.2)(@nestjs/core@10.0.2)(@nestjs/microservices@10.0.5)(@nestjs/platform-express@10.0.2)
       '@server-octopus/types':
         specifier: 1.0.1
-        version: link:../types
+        version: 1.0.1
       '@types/bcrypt':
         specifier: ^5.0.0
         version: 5.0.0
@@ -835,7 +835,7 @@ importers:
         version: 3.7.2(prettier@2.8.8)
       '@server-octopus/types':
         specifier: 1.0.1
-        version: link:../types
+        version: 1.0.1
       '@types/node':
         specifier: ^17.0.45
         version: 17.0.45
@@ -2718,7 +2718,7 @@ packages:
     engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=17.0.0}
     dependencies:
       '@jest/types': 28.1.3
-      '@types/node': 16.0.0
+      '@types/node': 20.3.1
       chalk: 4.1.2
       jest-message-util: 28.1.3
       jest-util: 28.1.3
@@ -2829,7 +2829,7 @@ packages:
     dependencies:
       '@jest/fake-timers': 28.1.3
       '@jest/types': 28.1.3
-      '@types/node': 16.0.0
+      '@types/node': 20.3.1
       jest-mock: 28.1.3
     dev: true
 
@@ -2883,7 +2883,7 @@ packages:
     dependencies:
       '@jest/types': 28.1.3
       '@sinonjs/fake-timers': 9.1.2
-      '@types/node': 16.0.0
+      '@types/node': 20.3.1
       jest-message-util: 28.1.3
       jest-mock: 28.1.3
       jest-util: 28.1.3
@@ -2939,7 +2939,7 @@ packages:
       '@jest/transform': 28.1.3
       '@jest/types': 28.1.3
       '@jridgewell/trace-mapping': 0.3.18
-      '@types/node': 16.0.0
+      '@types/node': 20.3.1
       chalk: 4.1.2
       collect-v8-coverage: 1.0.2
       exit: 0.1.2
@@ -5264,6 +5264,13 @@ packages:
       domhandler: 5.0.3
       selderee: 0.11.0
     dev: false
+
+  /@server-octopus/shared@1.0.1:
+    resolution: {integrity: sha512-K8FrgF6l8hmJFBS/HzqaDKNnZPmp3VFa/1044lodcrvD9EVu/GgcKEP+IMqyeaX7EA8NLqiPWA5Da2JIp5HX0A==}
+
+  /@server-octopus/types@1.0.1:
+    resolution: {integrity: sha512-XAhdcIoJMQf/Ea6JNNjnlVa/t1Uq9BTb9e110oYAoZBk85sgk1edWXw/6nphvg6B4zch9XStY/MNTuIXxpsiTA==}
+    dev: true
 
   /@sinclair/typebox@0.24.51:
     resolution: {integrity: sha512-1P1OROm/rdubP5aFDSZQILU0vrLCJ4fvHt6EoqHEM+2D/G5MK3bIaymUKLit8Js9gbns5UyJnkP/TZROLw4tUA==}
@@ -9953,7 +9960,7 @@ packages:
       '@jest/expect': 28.1.3
       '@jest/test-result': 28.1.3
       '@jest/types': 28.1.3
-      '@types/node': 16.0.0
+      '@types/node': 20.3.1
       chalk: 4.1.2
       co: 4.6.0
       dedent: 0.7.0
@@ -10202,7 +10209,7 @@ packages:
       '@jest/environment': 28.1.3
       '@jest/fake-timers': 28.1.3
       '@jest/types': 28.1.3
-      '@types/node': 16.0.0
+      '@types/node': 20.3.1
       jest-mock: 28.1.3
       jest-util: 28.1.3
     dev: true
@@ -10235,7 +10242,7 @@ packages:
     dependencies:
       '@jest/types': 28.1.3
       '@types/graceful-fs': 4.1.6
-      '@types/node': 16.0.0
+      '@types/node': 20.3.1
       anymatch: 3.1.3
       fb-watchman: 2.0.2
       graceful-fs: 4.2.11
@@ -10338,7 +10345,7 @@ packages:
     engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=17.0.0}
     dependencies:
       '@jest/types': 28.1.3
-      '@types/node': 16.0.0
+      '@types/node': 20.3.1
     dev: true
 
   /jest-mock@29.6.2:
@@ -10443,7 +10450,7 @@ packages:
       '@jest/test-result': 28.1.3
       '@jest/transform': 28.1.3
       '@jest/types': 28.1.3
-      '@types/node': 16.0.0
+      '@types/node': 20.3.1
       chalk: 4.1.2
       emittery: 0.10.2
       graceful-fs: 4.2.11
@@ -10616,7 +10623,7 @@ packages:
     engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=17.0.0}
     dependencies:
       '@jest/types': 28.1.3
-      '@types/node': 16.0.0
+      '@types/node': 20.3.1
       chalk: 4.1.2
       ci-info: 3.8.0
       graceful-fs: 4.2.11
@@ -10665,7 +10672,7 @@ packages:
     dependencies:
       '@jest/test-result': 28.1.3
       '@jest/types': 28.1.3
-      '@types/node': 16.0.0
+      '@types/node': 20.3.1
       ansi-escapes: 4.3.2
       chalk: 4.1.2
       emittery: 0.10.2
@@ -10700,7 +10707,7 @@ packages:
     resolution: {integrity: sha512-CqRA220YV/6jCo8VWvAt1KKx6eek1VIHMPeLEbpcfSfkEeWyBNppynM/o6q+Wmw+sOhos2ml34wZbSX3G13//g==}
     engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=17.0.0}
     dependencies:
-      '@types/node': 16.0.0
+      '@types/node': 20.3.1
       merge-stream: 2.0.0
       supports-color: 8.1.1
     dev: true
@@ -14537,18 +14544,21 @@ packages:
   /ts-interface-checker@0.1.13:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
 
-  /ts-jest@28.0.5(@babel/core@7.22.9)(jest@28.1.2)(typescript@4.9.5):
-    resolution: {integrity: sha512-Sx9FyP9pCY7pUzQpy4FgRZf2bhHY3za576HMKJFs+OnQ9jS96Du5vNsDKkyedQkik+sEabbKAnCliv9BEsHZgQ==}
+  /ts-jest@28.0.8(@babel/core@7.22.9)(jest@28.1.2)(typescript@4.9.5):
+    resolution: {integrity: sha512-5FaG0lXmRPzApix8oFG8RKjAz4ehtm8yMKOTy5HX3fY6W8kmvOrmcY0hKDElW52FJov+clhUbrKAqofnj4mXTg==}
     engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=17.0.0}
     hasBin: true
     peerDependencies:
       '@babel/core': '>=7.0.0-beta.0 <8'
+      '@jest/types': ^28.0.0
       babel-jest: ^28.0.0
       esbuild: '*'
       jest: ^28.0.0
       typescript: '>=4.3'
     peerDependenciesMeta:
       '@babel/core':
+        optional: true
+      '@jest/types':
         optional: true
       babel-jest:
         optional: true
