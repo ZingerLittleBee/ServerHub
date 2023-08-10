@@ -1,4 +1,9 @@
-import { loginUrl, logoutUrl, registerUrl } from "@/requests/endpoint"
+import {
+  authCheckUrl,
+  loginUrl,
+  logoutUrl,
+  registerUrl,
+} from "@/requests/endpoint"
 import instance from "@/requests/instance"
 import { Result } from "@server-octopus/types"
 
@@ -9,9 +14,9 @@ import { toast } from "@/components/ui/use-toast"
 
 
 export type LoginData = {
-    email?: string
-    username?: string
-    password: string
+  email?: string
+  username?: string
+  password: string
 }
 
 export const login = async ({ password, email, username }: LoginData) => {
@@ -45,4 +50,13 @@ export const register = async (
 export const logout = async () => {
   const { data } = await instance.post<Result>(logoutUrl)
   return data.success
+}
+
+export const isAuthenticated = async () => {
+  try {
+    await instance.get<Result>(authCheckUrl)
+    return true
+  } catch {
+    return false
+  }
 }

@@ -11,26 +11,27 @@ const instance = axios.create({
   baseURL: 'http://localhost:3000/api',
   withCredentials: true,
   headers: {
-    'Content-Type': 'application/json'
-  }
-});
+    "Content-Type": "application/json",
+  },
+})
 
-instance.interceptors.response.use(function (response) {
-  if (response.data) {
-    const result = response.data as Result
+instance.interceptors.response.use(
+  function (response) {
+    if (response.data) {
+      const result = response.data as Result
 
-    if (!result.success) {
-      toast(
-        {
+      if (!result.success) {
+        toast({
           title: result.message,
-        }
-      )
+        })
+      }
     }
-  }
 
-  return response;
-}, function (error) {
-  return Promise.reject(error);
-});
+    return response
+  },
+  function (error) {
+    return Promise.reject(error)
+  }
+)
 
 export default instance

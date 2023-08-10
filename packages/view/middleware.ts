@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server"
+import { isAuthenticated } from "@/requests/auth/auth"
 
-import { isAuthenticated } from "@/lib/auth"
 import { kDashboardRoute, kLoginRoute } from "@/lib/route"
 
 
@@ -11,7 +11,7 @@ export async function middleware(request: NextRequest) {
   const cookie = request.cookies.toString()
   const url = request.nextUrl.clone()
 
-  const isAuth = await isAuthenticated(cookie)
+  const isAuth = await isAuthenticated()
 
   if (request.nextUrl.pathname.startsWith(kLoginRoute)) {
     return isAuth

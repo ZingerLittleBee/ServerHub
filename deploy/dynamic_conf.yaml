@@ -1,21 +1,5 @@
 http:
     routers:
-        api-s:
-            rule: "Host(`serverhub.app`) && PathPrefix(`/api/s/`)"
-            service: "service-server"
-            middlewares:
-                - stripprefix-s
-            tls:
-                certResolver: myresolver
-
-        api-c:
-            rule: "Host(`serverhub.app`) && PathPrefix(`/api/c/`)"
-            service: "service-client"
-            middlewares:
-                - stripprefix-c
-            tls:
-                certResolver: myresolver
-
         view:
             rule: "Host(`serverhub.app`)"
             service: "service-view"
@@ -55,14 +39,3 @@ http:
             loadBalancer:
                 servers:
                     - url: "http://client:3002"
-
-    middlewares:
-        stripprefix-s:
-            stripPrefix:
-                prefixes:
-                    - "/api/s"
-
-        stripprefix-c:
-            stripPrefix:
-                prefixes:
-                    - "/api/c"

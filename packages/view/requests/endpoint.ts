@@ -3,6 +3,7 @@ const clientBasePath = "/c"
 const loginUrl = `${serverBasePath}/auth/login`
 const registerUrl = `${serverBasePath}/auth/register`
 const logoutUrl = `${serverBasePath}/auth/logout`
+const authCheckUrl = `${serverBasePath}/auth/check`
 
 const profileUrl = `${serverBasePath}/profile`
 
@@ -13,5 +14,6 @@ export {
     registerUrl,
     logoutUrl,
     profileUrl,
-    addClientUrl
+    addClientUrl,
+    authCheckUrl
 }
