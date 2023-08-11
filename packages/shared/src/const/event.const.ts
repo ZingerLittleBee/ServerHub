@@ -1,6 +1,8 @@
 const kJwtCreatedEvent = 'jwt.created'
 
-const kFusionAddEvent = 'fusion.add'
+const kFusionPersistentAddEvent = 'fusion.persistent.add'
+
+const kFusionRealtimeAddEvent = 'fusion.realtime.add'
 
 const kClientUpsertEvent = 'client.upsert'
 
@@ -44,11 +46,12 @@ const kNotificationEmailSend = 'notification.email.send'
 export const kClientDeviceUpdateEvent = 'client.device.update'
 
 export {
+    kFusionPersistentAddEvent,
+    kFusionRealtimeAddEvent,
     kClientTokenSign,
     kClientTokenValid,
     kClientTokenVerify,
     kClientUpsertEvent,
-    kFusionAddEvent,
     kJwtCreatedEvent,
     kNotificationEmailSend,
     kProfileCreateEvent,

@@ -9,8 +9,7 @@ import {
 import {
     extractAccessToken,
     kAuthService,
-    kClientTokenVerify,
-    kStorageService
+    kClientTokenVerify
 } from '@server-octopus/shared'
 import { ClientProxy } from '@nestjs/microservices'
 import { firstValueFrom } from 'rxjs'
@@ -20,10 +19,7 @@ import { ClientPayload, Result } from '@server-octopus/types'
 export class ClientDataGuard implements CanActivate {
     private logger = new Logger(ClientDataGuard.name)
 
-    constructor(
-        @Inject(kStorageService) private client: ClientProxy,
-        @Inject(kAuthService) private authService: ClientProxy
-    ) {}
+    constructor(@Inject(kAuthService) private authService: ClientProxy) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest()
@@ -34,9 +30,12 @@ export class ClientDataGuard implements CanActivate {
         }
         try {
             const { success, message, data } = await firstValueFrom(
-                this.client.send<Result<ClientPayload>>(kClientTokenVerify, {
-                    token
-                })
+                this.authService.send<Result<ClientPayload>>(
+                    kClientTokenVerify,
+                    {
+                        token
+                    }
+                )
             )
             if (!success || !data?.clientId) {
                 this.logger.error(

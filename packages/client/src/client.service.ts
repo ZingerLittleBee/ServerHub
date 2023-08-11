@@ -6,7 +6,8 @@ import {
     kClientDeviceUpdateEvent,
     kClientTokenSign,
     kClientTokenValid,
-    kFusionAddEvent,
+    kFusionPersistentAddEvent,
+    kFusionRealtimeAddEvent,
     kStorageService,
     Result
 } from '@server-octopus/shared'
@@ -80,8 +81,12 @@ export class ClientService {
         return data
     }
 
-    async addData(fusion: FusionDto) {
-        this.storageClient.emit(kFusionAddEvent, fusion)
+    async addRealtimeData(fusion: FusionDto) {
+        this.storageClient.emit(kFusionRealtimeAddEvent, fusion)
+    }
+
+    async addPersistentData(fusion: FusionDto) {
+        this.storageClient.emit(kFusionPersistentAddEvent, fusion)
     }
 
     async create(client: CreateClientDto) {

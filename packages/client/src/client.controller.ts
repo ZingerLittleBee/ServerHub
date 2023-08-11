@@ -11,6 +11,7 @@ import {
 import { ClientService } from './client.service'
 import { ClientRegisterGuard } from '@/guard/register.guard'
 import {
+    ClientPayload,
     CreateClientDto,
     CreateClientVo,
     CreateDevice,
@@ -21,6 +22,8 @@ import { ResultUtil } from '@server-octopus/shared'
 import { VerifyTokenGuard } from '@/guard/verify.guard'
 import { convertFormatDataToString } from '@/util'
 import { ExtraGuard } from '@/guard/extra.guard'
+import { ClientDataGuard } from '@/guard/data.guard'
+import { RawFusion } from '@/type'
 
 @Controller('client')
 export class ClientController {
@@ -79,14 +82,29 @@ export class ClientController {
         }
     }
 
-    // @UseGuards(ClientDataGuard)
-    // @Post('data')
-    // async data(@Body() fusion: Fusion) {
-    //     try {
-    //         await this.clientService.addData(fusion)
-    //     } catch (e) {
-    //         this.logger.error(`add data: ${fusion}, error: ${e.message}`)
-    //         return ResultUtil.error(e.message)
-    //     }
-    // }
+    /**
+     * add fusion to persistent db
+     */
+    @UseGuards(ClientDataGuard)
+    @Post('data')
+    async data(
+        @Request() req: Request & ClientPayload,
+        @Body() { fusion, time }: RawFusion
+    ) {
+        try {
+            await this.clientService.addPersistentData({
+                overview: fusion.overview,
+                os: fusion.os,
+                realtime: fusion.realtime,
+                fullProcess: fusion.full_process,
+                clientId: req.clientId,
+                time: time
+            })
+        } catch (e) {
+            this.logger.error(
+                `add persistent data: ${fusion}, error: ${e.message}`
+            )
+            return ResultUtil.error(e.message)
+        }
+    }
 }

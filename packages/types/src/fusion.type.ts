@@ -1,6 +1,9 @@
 import { DiskDetail } from "./client/device.type";
 
-export type FormatData = [string, 'B' | 'KiB' | 'MiB' | 'GiB' | 'TiB' | 'PiB' | 'EiB' | '°C'];
+export type FormatData = [
+    string,
+    "B" | "KiB" | "MiB" | "GiB" | "TiB" | "PiB" | "EiB" | "°C"
+];
 
 export type DiskIO = {
     read: FormatData
@@ -106,10 +109,9 @@ export type Process = {
 export type SimpleProcess = Pick<Process, 'name' | 'pid' | 'cpu' | 'memory'>
 
 export type Fusion = {
-    overview?: Overview
+    overview: Overview
     os?: Os
     realtime?: Realtime
-    process?: Process[]
     full_process?: Process[]
 }
 

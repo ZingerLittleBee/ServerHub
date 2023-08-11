@@ -12,7 +12,10 @@ export class ClientService {
     }
 
     verify(token: string) {
-        return this.tokenService.verify(token, TokenType.clientAccess)
+        return this.tokenService.verify<ClientPayload>(
+            token,
+            TokenType.clientAccess
+        )
     }
 
     isTokenValid(token: string) {

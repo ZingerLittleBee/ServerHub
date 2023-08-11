@@ -7,7 +7,11 @@ import {
     kClientTokenVerify,
     ResultUtil
 } from '@server-octopus/shared'
-import { ClientPayload, Result } from '@server-octopus/types'
+import {
+    ClientPayload,
+    ClientVerifyResult,
+    Result
+} from '@server-octopus/types'
 
 @Controller()
 export class ClientController {
@@ -26,7 +30,7 @@ export class ClientController {
     }
 
     @MessagePattern(kClientTokenVerify)
-    async verify(data: { token: string }): Promise<Result<any>> {
+    async verify(data: { token: string }): Promise<ClientVerifyResult> {
         try {
             return ResultUtil.ok(await this.clientService.verify(data.token))
         } catch (e) {

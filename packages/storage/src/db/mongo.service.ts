@@ -3,15 +3,23 @@ import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { FusionModel } from '@/db/schemas/fusion.schema'
 import { FusionDto } from '@server-octopus/types'
+import { kPersistentFusion, kRealtimeFusion } from '@/db/const'
 
 @Injectable()
 export class MongoService {
     constructor(
-        @InjectModel(FusionModel.name) private fusionModel: Model<FusionModel>
+        @InjectModel(kPersistentFusion)
+        private persistentFusion: Model<FusionModel>,
+        @InjectModel(kRealtimeFusion) private realtimeFusion: Model<FusionModel>
     ) {}
 
-    async addFusion(fusion: FusionDto) {
-        const createdFusion = new this.fusionModel(fusion)
+    async addPersistentFusion(fusion: FusionDto) {
+        const createdFusion = new this.persistentFusion(fusion)
+        return createdFusion.save()
+    }
+
+    async addRealtimeFusion(fusion: FusionDto) {
+        const createdFusion = new this.realtimeFusion(fusion)
         return createdFusion.save()
     }
 }

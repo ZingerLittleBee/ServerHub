@@ -6,7 +6,8 @@ import { ResultUtil } from '@/utils/result.util'
 import { ErrorUtil } from '@/db/error.util'
 import { MongoService } from '@/db/mongo.service'
 import {
-    kFusionAddEvent,
+    kFusionPersistentAddEvent,
+    kFusionRealtimeAddEvent,
     kJwtCreatedEvent,
     kRedisEqualEvent
 } from '@server-octopus/shared'
@@ -24,9 +25,14 @@ export class StorageController {
         this.redisService.setWithExpire({ ...data })
     }
 
-    @EventPattern(kFusionAddEvent)
-    async addFusion(fusion: FusionDto) {
-        this.mongoService.addFusion(fusion)
+    @EventPattern(kFusionPersistentAddEvent)
+    async addPersistentFusion(fusion: FusionDto) {
+        await this.mongoService.addPersistentFusion(fusion)
+    }
+
+    @EventPattern(kFusionRealtimeAddEvent)
+    async addRealtimeFusion(fusion: FusionDto) {
+        await this.mongoService.addRealtimeFusion(fusion)
     }
 
     @MessagePattern(kRedisEqualEvent)
