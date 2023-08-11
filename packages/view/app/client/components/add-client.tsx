@@ -71,14 +71,13 @@ export function AddClient() {
         title: "Uh oh! Something went wrong.",
         description: message,
       })
+      return
     }
-    // TODO
-    console.log("clientVo", clientVo)
     setIsLoading(false)
     setIsOpen(false)
     dialogDispatch({
       type: kOpenAlertDialog,
-      payload: cctTemplate(clientVo?.clientId ?? ""),
+      payload: cctTemplate(clientVo?.token ?? ""),
     })
   }
 

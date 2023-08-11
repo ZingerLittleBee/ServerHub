@@ -13,6 +13,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import { toast } from "@/components/ui/use-toast"
 import { useClientStore } from "@/app/client/store"
 import { kSetDialogIsOpen } from "@/app/client/store/dialog"
 
@@ -20,6 +21,9 @@ export interface ClientDialogProps {
   isOpen: boolean
   title: string
   description: React.ReactNode
+  cancelText?: string
+  confirmText?: string
+  onConfirm?: () => void
 }
 // ClientCommunicationToken
 export const cctTemplate = (
@@ -34,7 +38,9 @@ export const cctTemplate = (
       and remove your data from our servers.
       <span className="mb-4 mt-6 block max-h-[650px] max-w-[460px] overflow-x-auto rounded-lg border bg-zinc-950 py-4 dark:bg-zinc-900">
         <code className="relative rounded px-[0.6rem] py-[0.2rem] font-mono text-sm">
-          <span className="text-white">{token}</span>
+          <span className="text-white">{`${token.slice(0, 10)}...${token.slice(
+            -10
+          )}`}</span>
         </code>
       </span>
       {"Don't know how to use?"}{" "}
@@ -47,6 +53,23 @@ export const cctTemplate = (
       </Link>
     </>
   ),
+  cancelText: "Close",
+  confirmText: "Copy and Close",
+  onConfirm: () => {
+    navigator.clipboard
+      .writeText(token)
+      .then(() => {
+        toast({
+          title: "Copied successfully.",
+        })
+      })
+      .catch(() => {
+        toast({
+          title: "Please copy manually.",
+          description: `Token: ${token}`,
+        })
+      })
+  },
 })
 
 export function ClientDialog() {
@@ -70,8 +93,10 @@ export function ClientDialog() {
           <AlertDialogDescription>{props.description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
+          <AlertDialogCancel>{props.cancelText}</AlertDialogCancel>
+          <AlertDialogAction onClick={props.onConfirm}>
+            {props.confirmText}
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
