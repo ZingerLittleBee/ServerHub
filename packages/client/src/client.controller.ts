@@ -37,7 +37,6 @@ export class ClientController {
         @Request() req: Request & { clientId: string; userId: string }
     ): Promise<Result<{ token: string }>> {
         try {
-            console.log('device', this.clientService.deviceToDto(device))
             await this.clientService.registerClient({
                 device: this.clientService.deviceToDto(device),
                 clientId: req.clientId,
