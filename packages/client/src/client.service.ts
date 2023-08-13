@@ -8,19 +8,24 @@ import {
     kClientTokenValid,
     kFusionPersistentAddEvent,
     kFusionRealtimeAddEvent,
-    kStorageService,
-    Result
+    kStorageService
 } from '@server-octopus/shared'
 import { ClientProxy } from '@nestjs/microservices'
 import {
     ClientPayload,
     CreateClientDto,
     CreateClientResult,
+    CreateDevice,
+    DeviceDto,
+    DiskDetailDto,
     FusionDto,
+    NetworkInfoDto,
     RegisterClientDto,
+    Result,
     UpdateDeviceDto
 } from '@server-octopus/types'
 import { firstValueFrom } from 'rxjs'
+import { formatDataToString } from '@/util'
 
 @Injectable()
 export class ClientService {
@@ -31,43 +36,24 @@ export class ClientService {
         @Inject(kStorageService) private storageClient: ClientProxy
     ) {}
 
-    async registerClient(client: RegisterClientDto) {
-        const {
-            success,
-            message,
-            data: clientId
-        } = await firstValueFrom(
-            this.storageClient.send<Result<string>, UpdateDeviceDto>(
+    async registerClient({ clientId, device }: RegisterClientDto) {
+        const { success, message } = await firstValueFrom(
+            this.storageClient.send<Result, UpdateDeviceDto>(
                 kClientDeviceUpdateEvent,
                 {
-                    clientId: client.clientId,
-                    device: client.device
+                    clientId,
+                    device
                 }
             )
         )
         if (!success) {
             this.logger.error(
-                `update device: ${inspect(client)} error, message: ${message}`
+                `Register device: ${inspect(
+                    clientId
+                )} error, message: ${message}`
             )
             throw new Error(message)
         }
-        const {
-            success: signSuccess,
-            message: signMsg,
-            data: signData
-        } = await firstValueFrom(
-            this.storageClient.send<Result<string>>(kClientTokenSign, {
-                clientId,
-                userId: client.userId
-            })
-        )
-        if (!signSuccess || !signData) {
-            this.logger.error(
-                `Sign token: ${inspect(client)} error, message: ${signMsg}`
-            )
-            throw new Error('Sign Token Error')
-        }
-        return signData
     }
 
     async isTokenValid(token: string) {
@@ -122,5 +108,34 @@ export class ClientService {
             throw new Error(message)
         }
         return data
+    }
+
+    deviceToDto(device: CreateDevice): DeviceDto {
+        return {
+            name: device.name,
+            hostname: device.hostname,
+            kernel: device.kernel,
+            cpu_num: device.cpu_num,
+            brand: device.brand,
+            frequency: device.frequency,
+            vendor: device.vendor,
+            memory: formatDataToString(device.memory),
+            swap: formatDataToString(device.swap),
+            version: device.version,
+            disk: device.disk.map<DiskDetailDto>((disk) => ({
+                type: disk.disk_type,
+                name: disk.device_name,
+                file_system: disk.file_system,
+                total: formatDataToString(disk.total_space),
+                available: formatDataToString(disk.available_space),
+                removeable: disk.is_removable
+            })),
+            network: device.network.map<NetworkInfoDto>((network) => ({
+                name: network.name,
+                mac: network.mac,
+                rx: formatDataToString(network.rx),
+                tx: formatDataToString(network.tx)
+            }))
+        }
     }
 }

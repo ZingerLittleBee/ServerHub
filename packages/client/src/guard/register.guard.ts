@@ -23,7 +23,7 @@ export class ClientRegisterGuard implements CanActivate {
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest()
         const token = extractAccessToken(request)
-        if (!token) return true
+        if (!token) return false
         try {
             const { success, data } = await firstValueFrom(
                 this.authClient.send<Result<ClientPayload>>(

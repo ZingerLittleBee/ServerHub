@@ -1,3 +1,5 @@
+import { FormatData } from '@server-octopus/types'
+
 export function convertFormatDataToString(obj: any) {
     const units = ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', '°C']
 
@@ -16,4 +18,8 @@ export function convertFormatDataToString(obj: any) {
         }
     }
     return obj
+}
+
+export function formatDataToString(formatData: FormatData) {
+    return `${formatData[0]} ${formatData[1]}`
 }

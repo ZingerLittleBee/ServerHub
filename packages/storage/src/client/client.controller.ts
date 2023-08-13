@@ -48,6 +48,11 @@ export class ClientController {
 
     @EventPattern(kClientDeviceUpdateEvent)
     async updateClientDevice(data: UpdateDeviceDto) {
-        return this.clientService.updateClientDevice(data)
+        try {
+            await this.clientService.updateClientDevice(data)
+            return ResultUtil.ok()
+        } catch (e) {
+            return ResultUtil.error(this.errorUtil.explain(e))
+        }
     }
 }

@@ -20,7 +20,6 @@ import {
 } from '@server-octopus/types'
 import { ResultUtil } from '@server-octopus/shared'
 import { VerifyTokenGuard } from '@/guard/verify.guard'
-import { convertFormatDataToString } from '@/util'
 import { ExtraGuard } from '@/guard/extra.guard'
 import { ClientDataGuard } from '@/guard/data.guard'
 import { RawFusion } from '@/type'
@@ -38,14 +37,13 @@ export class ClientController {
         @Request() req: Request & { clientId: string; userId: string }
     ): Promise<Result<{ token: string }>> {
         try {
-            const token = await this.clientService.registerClient({
-                ...convertFormatDataToString(device),
+            console.log('device', this.clientService.deviceToDto(device))
+            await this.clientService.registerClient({
+                device: this.clientService.deviceToDto(device),
                 clientId: req.clientId,
                 userId: req.userId
             })
-            return ResultUtil.ok({
-                token
-            })
+            return ResultUtil.ok()
         } catch (e) {
             return ResultUtil.error(e.message)
         }

@@ -8,12 +8,14 @@ import {
     kClientServicePort
 } from '@server-octopus/shared'
 import { Logger } from '@nestjs/common'
+import { NestExpressApplication } from '@nestjs/platform-express'
 
 async function bootstrap() {
     const logger = new Logger('Bootstrap')
-    const app = await NestFactory.create(ClientModule)
+    const app = await NestFactory.create<NestExpressApplication>(ClientModule)
     app.useWebSocketAdapter(new WsAdapter(app))
     app.use(cookieParser())
+    app.useBodyParser('json', { limit: '10mb' })
 
     const configService = app.get(ConfigService)
     const port =
