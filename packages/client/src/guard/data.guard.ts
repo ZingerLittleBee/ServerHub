@@ -25,7 +25,7 @@ export class ClientDataGuard implements CanActivate {
         const request = context.switchToHttp().getRequest()
         const token = extractAccessToken(request)
         if (!token) {
-            this.logger.error(`token not found`)
+            this.logger.warn(`From ${request.ip} request, token not found`)
             throw new UnauthorizedException(`token not found`)
         }
         try {
@@ -48,7 +48,9 @@ export class ClientDataGuard implements CanActivate {
                 `token: ${token} verify success, clientId: ${data.clientId}`
             )
         } catch (e) {
-            this.logger.error(`token: ${token} verify failed`)
+            this.logger.error(
+                `From ip: ${request.ip} token: ${token} verify failed, error: ${e}`
+            )
             throw new UnauthorizedException(e)
         }
         return true

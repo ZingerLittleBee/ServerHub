@@ -8,7 +8,6 @@ import {
     WsException
 } from '@nestjs/websockets'
 import { Injectable, Logger } from '@nestjs/common'
-import { inspect } from 'util'
 import { Server } from 'ws'
 import { ClientService } from '@/client.service'
 import { EventsService } from '@/gateway/events.service'
@@ -62,7 +61,7 @@ export class EventsGateway implements OnGatewayConnection {
         @ConnectedSocket() client: any
     ) {
         // this.clientService.addData(fusion)
-        console.log(`report: ${inspect(fusion)}`)
+        // console.log(`report: ${inspect(fusion)}`)
         client.emit('report', 'ok')
     }
 }

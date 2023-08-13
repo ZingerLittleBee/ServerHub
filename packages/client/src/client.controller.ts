@@ -99,7 +99,7 @@ export class ClientController {
             })
         } catch (e) {
             this.logger.error(
-                `add persistent data: ${fusion}, error: ${e.message}`
+                `From clientId: ${req.clientId} add persistent data, error: ${e.message}`
             )
             return ResultUtil.error(e.message)
         }
