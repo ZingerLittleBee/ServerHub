@@ -12,12 +12,14 @@ import { EventsGateway } from '@/gateway/events.gateway'
 import { EventsService } from '@/gateway/events.service'
 import { ClientProxyFactory, Transport } from '@nestjs/microservices'
 import { ConfigModule, ConfigService } from '@nestjs/config'
+import { DeviceModule } from '@/device/device.module'
 
 @Module({
     imports: [
         ConfigModule.forRoot({
             isGlobal: true
-        })
+        }),
+        DeviceModule
     ],
     controllers: [ClientController],
     providers: [

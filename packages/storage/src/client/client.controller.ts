@@ -4,9 +4,14 @@ import { Controller } from '@nestjs/common'
 import { EventPattern, MessagePattern } from '@nestjs/microservices'
 import {
     kClientCreateMsg,
-    kClientDeviceUpdateEvent
+    kClientDeviceUpdateEvent,
+    kClientDiskQueryById,
+    kClientNetworkQueryById
 } from '@server-octopus/shared'
 import {
+    ClientDiskQueryByIdResult,
+    ClientNetworkQueryByIdPayload,
+    ClientNetworkQueryByIdResult,
     ClientStatus,
     CreateClientDto,
     CreateClientResult,
@@ -53,6 +58,32 @@ export class ClientController {
             return ResultUtil.ok()
         } catch (e) {
             return ResultUtil.error(this.errorUtil.explain(e))
+        }
+    }
+
+    @EventPattern(kClientNetworkQueryById)
+    async queryClientNetworkById({
+        clientId
+    }: ClientNetworkQueryByIdPayload): Promise<ClientNetworkQueryByIdResult> {
+        try {
+            return ResultUtil.ok(
+                await this.clientService.queryClientNetworkById(clientId)
+            )
+        } catch (e) {
+            return ResultUtil.error(e)
+        }
+    }
+
+    @EventPattern(kClientDiskQueryById)
+    async queryClientDiskById({
+        clientId
+    }: ClientNetworkQueryByIdPayload): ClientDiskQueryByIdResult {
+        try {
+            return ResultUtil.ok(
+                await this.clientService.queryClientDiskById(clientId)
+            )
+        } catch (e) {
+            return ResultUtil.error(e)
         }
     }
 }

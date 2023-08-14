@@ -64,3 +64,6 @@ export type DeviceDto = {
 export type DeviceVo = DeviceDto
 
 export type CreateDeviceDto = DeviceDto
+
+export type NetworkInfoVo = NetworkInfoDto
+export type DiskDetailVo = DiskDetailDto

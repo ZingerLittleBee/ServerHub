@@ -4,6 +4,7 @@ import { formatTime } from "@/utils/time"
 import { ColumnDef } from "@tanstack/react-table"
 
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { SoTooltip } from "@/app/client/components/so-tooltip"
 
@@ -48,9 +49,9 @@ export const columns: ColumnDef<Task>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "title",
+    accessorKey: "name",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Title" />
+      <DataTableColumnHeader column={column} title="Name" />
     ),
     cell: ({ row }) => {
       const label = labels.find((label) => label.value === row.original.label)
@@ -58,9 +59,9 @@ export const columns: ColumnDef<Task>[] = [
       return (
         <div className="flex space-x-2">
           {label && <Badge variant="outline">{label.label}</Badge>}
-          <SoTooltip content={row.getValue("title")}>
-            <span className="max-w-[500px] truncate font-medium">
-              {row.getValue("title")}
+          <SoTooltip content={row.getValue("name")}>
+            <span className="max-w-[150px] truncate font-medium">
+              {row.getValue("name")}
             </span>
           </SoTooltip>
         </div>
@@ -120,6 +121,20 @@ export const columns: ColumnDef<Task>[] = [
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id))
     },
+  },
+  {
+    id: "network",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Network" />
+    ),
+    cell: () => <Button variant="ghost">View</Button>,
+  },
+  {
+    id: "disk",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Disk" />
+    ),
+    cell: () => <Button variant="ghost">View</Button>,
   },
   {
     accessorKey: "lct",

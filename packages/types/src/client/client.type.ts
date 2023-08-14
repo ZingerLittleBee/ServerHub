@@ -22,17 +22,17 @@ export type ClientVo = {
 
 export type CreateClientVo = ClientVo & { token: string };
 
-type CreateClientDto = {
+export type CreateClientDto = {
     name: string;
     userId?: string;
 };
 
-type UpdateClientDto = {
+export type UpdateClientDto = {
     name?: string;
     device?: DeviceDto;
 };
 
-type FusionDto = {
+export type FusionDto = {
     overview: Overview;
     os?: Os;
     realtime?: Realtime;
@@ -41,11 +41,11 @@ type FusionDto = {
     time: number;
 };
 
-type ClientPayload = TokenPayload;
+export type ClientPayload = TokenPayload;
 
-type ClientVerifyResult = Result<ClientPayload>;
+export type ClientVerifyResult = Result<ClientPayload>;
 
-type UpdateDeviceDto = {
+export type UpdateDeviceDto = {
     clientId: string;
     device: DeviceDto;
 };
@@ -54,13 +54,4 @@ export type RegisterClientDto = {
     clientId: string;
     userId: string;
     device: DeviceDto;
-};
-
-export {
-    ClientPayload,
-    CreateClientDto,
-    DeviceDto,
-    FusionDto,
-    UpdateDeviceDto,
-    ClientVerifyResult,
 };

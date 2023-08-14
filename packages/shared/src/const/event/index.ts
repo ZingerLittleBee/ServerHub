@@ -1,2 +1,2 @@
-export * from './res.type'
 export * from './client.event'
+export * from './user.event'

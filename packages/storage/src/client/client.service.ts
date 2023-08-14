@@ -1,7 +1,12 @@
 import { PrismaService } from '@/db/prisma.service'
 import { Injectable } from '@nestjs/common'
 import { StatusEnum } from '@server-octopus/shared'
-import { CreateClientDto, UpdateDeviceDto } from '@server-octopus/types'
+import {
+    CreateClientDto,
+    DiskDetailDto,
+    NetworkInfoDto,
+    UpdateDeviceDto
+} from '@server-octopus/types'
 
 @Injectable()
 export class ClientService {
@@ -57,5 +62,33 @@ export class ClientService {
                 }
             }
         })
+    }
+
+    async queryClientNetworkById(clientId: string): Promise<NetworkInfoDto[]> {
+        const json = await this.prismaService.device.findUnique({
+            where: {
+                client_id: clientId
+            },
+            select: {
+                network: true
+            }
+        })
+        return json === null || json.network === null
+            ? []
+            : (json.network as NetworkInfoDto[])
+    }
+
+    async queryClientDiskById(clientId: string): Promise<DiskDetailDto[]> {
+        const json = await this.prismaService.device.findUnique({
+            where: {
+                client_id: clientId
+            },
+            select: {
+                disk: true
+            }
+        })
+        return json === null || json.disk === null
+            ? []
+            : (json.disk as DiskDetailDto[])
     }
 }
