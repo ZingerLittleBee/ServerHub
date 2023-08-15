@@ -6,10 +6,12 @@ import {
     kClientCreateMsg,
     kClientDeviceUpdateEvent,
     kClientDiskQueryById,
+    kClientGetAll,
     kClientNetworkQueryById
 } from '@server-octopus/shared'
 import {
     ClientDiskQueryByIdResult,
+    ClientGetAllResult,
     ClientNetworkQueryByIdPayload,
     ClientNetworkQueryByIdResult,
     ClientStatus,
@@ -82,6 +84,15 @@ export class ClientController {
             return ResultUtil.ok(
                 await this.clientService.queryClientDiskById(clientId)
             )
+        } catch (e) {
+            return ResultUtil.error(e)
+        }
+    }
+
+    @EventPattern(kClientGetAll)
+    async getAll(): Promise<ClientGetAllResult> {
+        try {
+            return ResultUtil.ok(await this.clientService.getAll())
         } catch (e) {
             return ResultUtil.error(e)
         }

@@ -2,6 +2,8 @@ import { PrismaService } from '@/db/prisma.service'
 import { Injectable } from '@nestjs/common'
 import { StatusEnum } from '@server-octopus/shared'
 import {
+    ClientDto,
+    ClientStatus,
     CreateClientDto,
     DiskDetailDto,
     NetworkInfoDto,
@@ -11,6 +13,23 @@ import {
 @Injectable()
 export class ClientService {
     constructor(private readonly prismaService: PrismaService) {}
+
+    async getAll(): Promise<ClientDto[]> {
+        const clients = await this.prismaService.client.findMany({
+            select: {
+                client_id: true,
+                name: true,
+                status: true,
+                updated_at: true
+            }
+        })
+        return clients.map<ClientDto>((client) => ({
+            clientId: client.client_id,
+            name: client.name,
+            status: client.status as ClientStatus,
+            lastCommunication: client.updated_at
+        }))
+    }
 
     async create({ name, userId }: CreateClientDto) {
         return this.prismaService.client.create({

@@ -55,3 +55,11 @@ export type RegisterClientDto = {
     userId: string;
     device: DeviceDto;
 };
+
+export type ClientDto = {
+    clientId: string;
+    name: string;
+    status: ClientStatus;
+    lastCommunication: Date;
+};
+

@@ -12,6 +12,7 @@ import { ClientService } from './client.service'
 import { ClientRegisterGuard } from '@/guard/register.guard'
 import {
     ClientPayload,
+    ClientVo,
     CreateClientDto,
     CreateClientVo,
     CreateDevice,
@@ -29,6 +30,18 @@ export class ClientController {
     private readonly logger = new Logger(ClientController.name)
 
     constructor(private readonly clientService: ClientService) {}
+
+    @UseGuards(VerifyTokenGuard)
+    @Get()
+    async getAll(): Promise<Result<ClientVo[]>> {
+        try {
+            const clients = await this.clientService.getAll()
+            return ResultUtil.ok(clients)
+        } catch (e) {
+            this.logger.error(`Get all client error: ${e.message}`)
+            return ResultUtil.error('Get all client error')
+        }
+    }
 
     @UseGuards(ClientRegisterGuard)
     @Post('register')

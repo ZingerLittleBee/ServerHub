@@ -1,6 +1,8 @@
 export const kClientNetworkQueryById = 'client.network.query.by.id'
 export const kClientDiskQueryById = 'client.disk.query.by.id'
 
+export const kClientGetAll = 'client.get.all'
+
 export const kClientDeviceUpdateEvent = 'client.device.update'
 
 export const kClientUpsertEvent = 'client.upsert'

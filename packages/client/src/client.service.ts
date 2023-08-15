@@ -4,6 +4,7 @@ import {
     kAuthService,
     kClientCreateMsg,
     kClientDeviceUpdateEvent,
+    kClientGetAll,
     kClientTokenSign,
     kClientTokenValid,
     kFusionPersistentAddEvent,
@@ -12,7 +13,9 @@ import {
 } from '@server-octopus/shared'
 import { ClientProxy } from '@nestjs/microservices'
 import {
+    ClientGetAllResult,
     ClientPayload,
+    ClientVo,
     CreateClientDto,
     CreateClientResult,
     CreateDevice,
@@ -35,6 +38,17 @@ export class ClientService {
         @Inject(kAuthService) private authClient: ClientProxy,
         @Inject(kStorageService) private storageClient: ClientProxy
     ) {}
+
+    async getAll() {
+        const { success, message, data } = await firstValueFrom(
+            this.storageClient.send<ClientGetAllResult>(kClientGetAll, {})
+        )
+        if (!success) {
+            this.logger.error(`Get all client error, message: ${message}`)
+            throw new Error(message)
+        }
+        return data as ClientVo[]
+    }
 
     async registerClient({ clientId, device }: RegisterClientDto) {
         const { success, message } = await firstValueFrom(
