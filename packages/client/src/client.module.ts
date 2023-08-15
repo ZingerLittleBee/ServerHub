@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common'
 
 import {
-    defaultNatsServerUrl,
     kAuthService,
     kNatsServerUrl,
     kStorageService
@@ -10,7 +9,7 @@ import { ClientController } from '@/client.controller'
 import { ClientService } from '@/client.service'
 import { EventsGateway } from '@/gateway/events.gateway'
 import { EventsService } from '@/gateway/events.service'
-import { ClientProxyFactory, Transport } from '@nestjs/microservices'
+import { ClientsModule, Transport } from '@nestjs/microservices'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { DeviceModule } from '@/device/device.module'
 
@@ -19,39 +18,40 @@ import { DeviceModule } from '@/device/device.module'
         ConfigModule.forRoot({
             isGlobal: true
         }),
-        DeviceModule
+        DeviceModule,
+        ClientsModule.registerAsync({
+            isGlobal: true,
+            clients: [
+                {
+                    name: kAuthService,
+                    imports: [ConfigModule],
+                    inject: [ConfigService],
+                    useFactory: (configService: ConfigService) => ({
+                        transport: Transport.NATS,
+                        options: {
+                            servers:
+                                configService.get<string>(kNatsServerUrl) ??
+                                kNatsServerUrl
+                        }
+                    })
+                },
+                {
+                    name: kStorageService,
+                    imports: [ConfigModule],
+                    inject: [ConfigService],
+                    useFactory: (configService: ConfigService) => ({
+                        transport: Transport.NATS,
+                        options: {
+                            servers:
+                                configService.get<string>(kNatsServerUrl) ??
+                                kNatsServerUrl
+                        }
+                    })
+                }
+            ]
+        })
     ],
     controllers: [ClientController],
-    providers: [
-        ClientService,
-        EventsGateway,
-        EventsService,
-        {
-            provide: kAuthService,
-            inject: [ConfigService],
-            useFactory: (configService: ConfigService) =>
-                ClientProxyFactory.create({
-                    transport: Transport.NATS,
-                    options: {
-                        servers:
-                            configService.get<string>(kNatsServerUrl) ??
-                            defaultNatsServerUrl
-                    }
-                })
-        },
-        {
-            provide: kStorageService,
-            inject: [ConfigService],
-            useFactory: (configService: ConfigService) =>
-                ClientProxyFactory.create({
-                    transport: Transport.NATS,
-                    options: {
-                        servers:
-                            configService.get<string>(kNatsServerUrl) ??
-                            defaultNatsServerUrl
-                    }
-                })
-        }
-    ]
+    providers: [ClientService, EventsGateway, EventsService]
 })
 export class ClientModule {}

@@ -17,7 +17,7 @@ export class NetworkService {
 
     async queryByClientId(clientId: string): Promise<NetworkInfoDto[]> {
         const { success, message, data } = await firstValueFrom(
-            this.storageClient.emit<
+            this.storageClient.send<
                 ClientNetworkQueryByIdResult,
                 ClientNetworkQueryByIdPayload
             >(kClientNetworkQueryById, {

@@ -3,7 +3,7 @@ import { DiskDetailVo, Result } from '@server-octopus/types'
 import { ResultUtil } from '@server-octopus/shared'
 import { DiskService } from '@/device/disk/disk.service'
 
-@Controller('device/network')
+@Controller('device/disk')
 export class DiskController {
     constructor(private service: DiskService) {}
 

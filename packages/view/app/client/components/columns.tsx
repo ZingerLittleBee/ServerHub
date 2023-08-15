@@ -12,6 +12,7 @@ import { labels, priorities, statuses } from "../data/data"
 import { Task } from "../data/schema"
 import { DataTableColumnHeader } from "./data-table-column-header"
 import { DataTableRowActions } from "./data-table-row-actions"
+import NetworkInfo from '@/app/client/components/network-info'
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -124,10 +125,13 @@ export const columns: ColumnDef<Task>[] = [
   },
   {
     id: "network",
+    accessorKey: "id",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Network" />
     ),
-    cell: () => <Button variant="ghost">View</Button>,
+    cell: (row) => {
+      return <NetworkInfo trigger={<Button variant="ghost">View</Button>} clientId={row.getValue('id') as string} />
+    }
   },
   {
     id: "disk",

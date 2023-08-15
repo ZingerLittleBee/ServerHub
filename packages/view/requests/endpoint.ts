@@ -9,11 +9,16 @@ const profileUrl = `${serverBasePath}/profile`
 
 const addClientUrl = `${clientBasePath}/client`
 
+const queryNetworkByClientIdUrl = `${clientBasePath}/device/network`
+const queryDiskByClientIdUrl = `${clientBasePath}/device/disk`
+
 export {
     loginUrl,
     registerUrl,
     logoutUrl,
     profileUrl,
     addClientUrl,
-    authCheckUrl
+    authCheckUrl,
+    queryNetworkByClientIdUrl,
+    queryDiskByClientIdUrl
 }

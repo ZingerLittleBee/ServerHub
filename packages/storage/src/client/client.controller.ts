@@ -77,7 +77,7 @@ export class ClientController {
     @EventPattern(kClientDiskQueryById)
     async queryClientDiskById({
         clientId
-    }: ClientNetworkQueryByIdPayload): ClientDiskQueryByIdResult {
+    }: ClientNetworkQueryByIdPayload): Promise<ClientDiskQueryByIdResult> {
         try {
             return ResultUtil.ok(
                 await this.clientService.queryClientDiskById(clientId)
