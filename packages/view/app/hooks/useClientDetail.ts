@@ -4,6 +4,10 @@ import {
 } from "@/requests/client/client"
 import useSWR from "swr"
 
+
+
+
+
 export function useNetwork(clientId: string) {
   const { data, error, isLoading } = useSWR(
     clientId,
@@ -21,7 +25,7 @@ export function useDisk(clientId: string) {
     const { data, error, isLoading } = useSWR(clientId, queryDiskByClientIdRequest)
 
     return {
-        profile: data?.data,
+        disks: data?.data,
         isLoading,
         isError: error,
     }

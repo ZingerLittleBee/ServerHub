@@ -6,14 +6,16 @@ import { ColumnDef } from "@tanstack/react-table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
+import DiskDetailView from "@/app/client/components/disk-detail"
+import NetworkInfo from "@/app/client/components/network-info"
 import { SoTooltip } from "@/app/client/components/so-tooltip"
 
 import { labels, priorities, statuses } from "../data/data"
 import { Task } from "../data/schema"
 import { DataTableColumnHeader } from "./data-table-column-header"
 import { DataTableRowActions } from "./data-table-row-actions"
-import NetworkInfo from '@/app/client/components/network-info'
 
+// @ts-ignore
 export const columns: ColumnDef<Task>[] = [
   {
     id: "select",
@@ -130,15 +132,28 @@ export const columns: ColumnDef<Task>[] = [
       <DataTableColumnHeader column={column} title="Network" />
     ),
     cell: (row) => {
-      return <NetworkInfo trigger={<Button variant="ghost">View</Button>} clientId={row.getValue('id') as string} />
-    }
+      return (
+        <NetworkInfo
+          trigger={<Button variant="ghost">View</Button>}
+          // @ts-ignore
+          clientId={row.getValue("id") as string}
+        />
+      )
+    },
   },
   {
     id: "disk",
+    accessorKey: "id",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Disk" />
     ),
-    cell: () => <Button variant="ghost">View</Button>,
+    cell: (row) => (
+      <DiskDetailView
+        trigger={<Button variant="ghost">View</Button>}
+        // @ts-ignore
+        clientId={row.getValue("id") as string}
+      />
+    ),
   },
   {
     accessorKey: "lct",

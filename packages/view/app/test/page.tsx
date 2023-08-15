@@ -1,4 +1,3 @@
-
-export default function Page() {
-    return <div>TestPage</div>
+export default function TestPage() {
+  return <div>TestPage</div>
 }

@@ -14,7 +14,7 @@ export class DiskService {
 
     async queryByClientId(clientId: string): Promise<DiskDetailVo[]> {
         const { success, message, data } = await firstValueFrom(
-            this.storageClient.emit<
+            this.storageClient.send<
                 ClientDiskQueryByIdResult,
                 ClientDiskQueryByIdPayload
             >(kClientDiskQueryById, {
