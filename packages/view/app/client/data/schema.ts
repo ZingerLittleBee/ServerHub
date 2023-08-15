@@ -1,12 +1,10 @@
 import { z } from "zod"
 
 export const clientSchema = z.object({
-  id: z.string(),
+  clientId: z.string(),
   name: z.string(),
   status: z.string(),
-  label: z.string(),
-  priority: z.string(),
-  lct: z.string(),
+  lastCommunication: z.string(),
 })
 
 export type Task = z.infer<typeof clientSchema>

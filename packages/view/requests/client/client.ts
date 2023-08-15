@@ -1,10 +1,12 @@
 import {
   addClientUrl,
+  getAllClientUrl,
   queryDiskByClientIdUrl,
   queryNetworkByClientIdUrl,
 } from "@/requests/endpoint"
 import instance from "@/requests/instance"
 import {
+  ClientVo,
   CreateClientVo,
   DiskDetailVo,
   NetworkInfoVo,
@@ -40,8 +42,16 @@ export const queryDiskByClientIdRequest = async (
   const { data } = await instance.get<Result>(
     `${queryDiskByClientIdUrl}/${clientId}`
   )
-    return {
-        ...data,
-        data: JSON.parse(data.data) as DiskDetailVo[],
-    }
+  return {
+    ...data,
+    data: JSON.parse(data.data) as DiskDetailVo[],
+  }
+}
+
+export const getAllClientRequest = async (): Promise<Result<ClientVo[]>> => {
+  const { data } = await instance.get<Result>(getAllClientUrl)
+  return {
+    ...data,
+    data: data.data as ClientVo[]
+  }
 }

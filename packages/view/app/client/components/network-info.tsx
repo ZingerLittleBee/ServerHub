@@ -54,7 +54,7 @@ export default function NetworkInfo({ clientId, trigger }: NetworkInfoProps) {
           }
         }}
       >
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger>
           <SelectValue placeholder="Select" />
         </SelectTrigger>
         <SelectContent className="max-h-72">
@@ -74,7 +74,7 @@ export default function NetworkInfo({ clientId, trigger }: NetworkInfoProps) {
   const cardContent = () => {
     return (
       <div
-        className="grid grid-flow-row gap-4 pr-2.5"
+        className="grid grid-flow-row gap-4"
         style={{
           gridTemplateColumns: "repeat(auto-fill, minmax(288px, 1fr))",
         }}

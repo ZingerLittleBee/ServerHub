@@ -8,6 +8,7 @@ const authCheckUrl = `${serverBasePath}/auth/check`
 const profileUrl = `${serverBasePath}/profile`
 
 const addClientUrl = `${clientBasePath}/client`
+const getAllClientUrl = `${clientBasePath}/client`
 
 const queryNetworkByClientIdUrl = `${clientBasePath}/device/network`
 const queryDiskByClientIdUrl = `${clientBasePath}/device/disk`
@@ -20,5 +21,6 @@ export {
     addClientUrl,
     authCheckUrl,
     queryNetworkByClientIdUrl,
-    queryDiskByClientIdUrl
+    queryDiskByClientIdUrl,
+    getAllClientUrl
 }

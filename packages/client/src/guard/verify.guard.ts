@@ -18,7 +18,7 @@ export class VerifyTokenGuard implements CanActivate {
         const request = context.switchToHttp().getRequest()
         const token = extractAccessToken(request)
         if (!token) {
-            this.logger.warn('No token')
+            this.logger.warn(`From Request IP: ${request.ip}, No token`)
             throw new UnauthorizedException('No token')
         }
         const res = await this.clientService.isTokenValid(token)

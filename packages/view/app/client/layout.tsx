@@ -13,7 +13,7 @@ interface ClientLayoutProps {
 
 export default function ClientLayout({ children }: ClientLayoutProps) {
   return (
-    <section className="container grid items-center gap-6">
+    <section className="container relative grid items-center gap-6">
       <ClientStateProvider>{children}</ClientStateProvider>
     </section>
   )

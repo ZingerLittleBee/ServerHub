@@ -1,12 +1,10 @@
 import {
+  getAllClientRequest,
   queryDiskByClientIdRequest,
   queryNetworkByClientIdRequest,
 } from "@/requests/client/client"
+import { getAllClientUrl } from "@/requests/endpoint"
 import useSWR from "swr"
-
-
-
-
 
 export function useNetwork(clientId: string) {
   const { data, error, isLoading } = useSWR(
@@ -22,11 +20,28 @@ export function useNetwork(clientId: string) {
 }
 
 export function useDisk(clientId: string) {
-    const { data, error, isLoading } = useSWR(clientId, queryDiskByClientIdRequest)
+  const { data, error, isLoading } = useSWR(
+    clientId,
+    queryDiskByClientIdRequest
+  )
 
-    return {
-        disks: data?.data,
-        isLoading,
-        isError: error,
-    }
+  return {
+    disks: data?.data,
+    isLoading,
+    isError: error,
+  }
+}
+
+export function useAllClient() {
+  const { data, error, isLoading } = useSWR(
+    getAllClientUrl,
+    getAllClientRequest
+  )
+  console.log('useAllClient', data)
+
+  return {
+    clients: data?.data,
+    isLoading,
+    isError: error,
+  }
 }
