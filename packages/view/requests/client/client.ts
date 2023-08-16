@@ -1,9 +1,4 @@
-import {
-  addClientUrl,
-  getAllClientUrl,
-  queryDiskByClientIdUrl,
-  queryNetworkByClientIdUrl,
-} from "@/requests/endpoint"
+import { addClientUrl, getAllClientUrl } from "@/requests/endpoint"
 import instance from "@/requests/instance"
 import {
   ClientVo,
@@ -25,11 +20,9 @@ export const addClientRequest = async (name: string) => {
 }
 
 export const queryNetworkByClientIdRequest = async (
-  clientId: string
+  url: string
 ): Promise<Result<NetworkInfoVo[]>> => {
-  const { data } = await instance.get<Result>(
-    `${queryNetworkByClientIdUrl}/${clientId}`
-  )
+  const { data } = await instance.get<Result>(url)
   return {
     ...data,
     data: JSON.parse(data.data) as NetworkInfoVo[],
@@ -37,11 +30,9 @@ export const queryNetworkByClientIdRequest = async (
 }
 
 export const queryDiskByClientIdRequest = async (
-  clientId: string
+  url: string
 ): Promise<Result<DiskDetailVo[]>> => {
-  const { data } = await instance.get<Result>(
-    `${queryDiskByClientIdUrl}/${clientId}`
-  )
+  const { data } = await instance.get<Result>(url)
   return {
     ...data,
     data: JSON.parse(data.data) as DiskDetailVo[],
@@ -52,6 +43,6 @@ export const getAllClientRequest = async (): Promise<Result<ClientVo[]>> => {
   const { data } = await instance.get<Result>(getAllClientUrl)
   return {
     ...data,
-    data: data.data as ClientVo[]
+    data: data.data as ClientVo[],
   }
 }

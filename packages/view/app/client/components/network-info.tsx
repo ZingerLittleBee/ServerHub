@@ -61,8 +61,14 @@ export default function NetworkInfo({ clientId, trigger }: NetworkInfoProps) {
           <SelectGroup>
             <SelectLabel>Interface Name</SelectLabel>
             {networks?.map((network) => (
-              <SelectItem key={network.name} value={network.name}>
-                {network.name}
+              <SelectItem
+                key={network.name}
+                value={network.name}
+              >
+                <div className="grid grid-cols-2">
+                  <span className="text-left">{network.name}</span>
+                  <span className="w-40 rounded-md bg-muted text-center">{network.mac}</span>
+                </div>
               </SelectItem>
             ))}
           </SelectGroup>

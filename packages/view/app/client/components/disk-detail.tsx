@@ -1,6 +1,7 @@
 "use client"
 
 import { ReactNode, useRef } from "react"
+import { computeDiskUsage } from "@/utils/common"
 import { Usb } from "lucide-react"
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -33,7 +34,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { useDisk } from "@/app/hooks/useClientDetail"
-import { computeDiskUsage } from '@/utils/common'
 
 export type DiskDetailProps = {
   trigger: ReactNode
@@ -71,7 +71,14 @@ export default function DiskDetailView({ clientId, trigger }: DiskDetailProps) {
                 key={`${disk.name}-${index}`}
                 value={`${disk.name}-${index}`}
               >
-                {disk.name}
+                <div className="grid grid-cols-2">
+                  <span className="text-left">{disk.name}</span>
+                  {disk.type && (
+                    <span className="w-36 rounded-md bg-muted text-center">
+                      {disk.type}
+                    </span>
+                  )}
+                </div>
               </SelectItem>
             ))}
           </SelectGroup>
@@ -121,7 +128,7 @@ export default function DiskDetailView({ clientId, trigger }: DiskDetailProps) {
                     className="col-span-2 my-2"
                   />
                   {disk.available && disk.total && (
-                    <span className="text-md col-span-2 text-center text-muted-foreground">
+                    <span className="col-span-2 text-center text-sm text-muted-foreground">
                       {`${computeDiskUsage(disk.available, disk.total)}% used`}
                     </span>
                   )}

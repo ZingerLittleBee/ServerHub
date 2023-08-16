@@ -75,7 +75,10 @@ export class ClientController {
         @Body() client: CreateClientDto
     ): Promise<Result<CreateClientVo>> {
         try {
-            const clientVo = await this.clientService.create(client)
+            const clientVo = await this.clientService.create({
+                ...client,
+                userId: req.userId
+            })
             if (!clientVo?.clientId)
                 return ResultUtil.error('create client error')
             const token = await this.clientService.signToken(
