@@ -21,4 +21,8 @@ export class ClientService {
     isTokenValid(token: string) {
         return this.tokenService.isTokenValid(token, TokenType.clientAccess)
     }
+
+    async handleClientDelete(tokenPayload: ClientPayload) {
+        this.tokenService.removeTokenByPayload(tokenPayload)
+    }
 }

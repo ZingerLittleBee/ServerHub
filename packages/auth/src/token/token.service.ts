@@ -12,6 +12,7 @@ import { ClientProxy } from '@nestjs/microservices'
 import {
     kJwtCreatedEvent,
     kRedisEqualEvent,
+    kRedisKeyRemove,
     kStorageService
 } from '@server-octopus/shared'
 import {
@@ -206,5 +207,16 @@ export class TokenService {
 
     getRefreshKey(payload: TokenPayload) {
         return `${payload.userId}:${payload.clientId}:token:refresh`
+    }
+
+    removeTokenByPayload(tokenPayload: TokenPayload) {
+        this.removeToken(this.getAccessKey(tokenPayload))
+        this.removeToken(this.getRefreshKey(tokenPayload))
+    }
+
+    private removeToken(key: string) {
+        this.client.emit(kRedisKeyRemove, {
+            key
+        })
     }
 }

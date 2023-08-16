@@ -1,9 +1,11 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     HttpCode,
     Logger,
+    Param,
     Post,
     Request,
     UseGuards
@@ -43,11 +45,32 @@ export class ClientController {
         }
     }
 
+    @UseGuards(ExtraGuard)
+    @Delete(':clientId')
+    async delete(
+        @Param('clientId') clientId: string,
+        @Request()
+        req: Request & TokenPayload
+    ) {
+        try {
+            await this.clientService.delete({
+                clientId,
+                userId: req.userId
+            })
+            return ResultUtil.ok()
+        } catch (e) {
+            this.logger.error(
+                `Delete clientId: ${clientId} error: ${e.message}`
+            )
+            return ResultUtil.error(e.message)
+        }
+    }
+
     @UseGuards(ClientRegisterGuard)
     @Post('register')
     async register(
         @Body() device: CreateDevice,
-        @Request() req: Request & { clientId: string; userId: string }
+        @Request() req: Request & TokenPayload
     ): Promise<Result<{ token: string }>> {
         try {
             await this.clientService.registerClient({

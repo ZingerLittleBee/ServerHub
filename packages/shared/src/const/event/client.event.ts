@@ -3,6 +3,8 @@ export const kClientDiskQueryById = 'client.disk.query.by.id'
 
 export const kClientGetAll = 'client.get.all'
 
+export const kClientDeleteEvent = 'client.delete'
+
 export const kClientDeviceUpdateEvent = 'client.device.update'
 
 export const kClientUpsertEvent = 'client.upsert'

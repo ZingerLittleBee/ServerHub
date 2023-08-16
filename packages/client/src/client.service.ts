@@ -3,6 +3,7 @@ import { inspect } from 'util'
 import {
     kAuthService,
     kClientCreateMsg,
+    kClientDeleteEvent,
     kClientDeviceUpdateEvent,
     kClientGetAll,
     kClientTokenSign,
@@ -48,6 +49,11 @@ export class ClientService {
             throw new Error(message)
         }
         return data as ClientVo[]
+    }
+
+    async delete(payload: ClientPayload) {
+        // no need call auth service, because auth service and storage on the same nats server
+        this.storageClient.emit(kClientDeleteEvent, payload)
     }
 
     async registerClient({ clientId, device }: RegisterClientDto) {

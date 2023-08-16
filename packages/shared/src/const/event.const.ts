@@ -1,26 +1,17 @@
-const kJwtCreatedEvent = 'jwt.created'
+export const kJwtCreatedEvent = 'jwt.created'
 
-const kFusionPersistentAddEvent = 'fusion.persistent.add'
+export const kFusionPersistentAddEvent = 'fusion.persistent.add'
 
-const kFusionRealtimeAddEvent = 'fusion.realtime.add'
+export const kFusionRealtimeAddEvent = 'fusion.realtime.add'
 
-const kRedisEqualEvent = 'redis.equal'
+export const kRedisEqualEvent = 'redis.equal'
 
-const kRedisExistsEvent = 'redis.exists'
+export const kRedisExistsEvent = 'redis.exists'
 
-const kProfileGetByUserIdEvent = 'profile.getByUserId'
+export const kRedisKeyRemove = 'redis.key.remove'
 
-const kProfileCreateEvent = 'profile.create'
+export const kProfileGetByUserIdEvent = 'profile.getByUserId'
 
-const kNotificationEmailSend = 'notification.email.send'
+export const kProfileCreateEvent = 'profile.create'
 
-export {
-    kFusionPersistentAddEvent,
-    kFusionRealtimeAddEvent,
-    kJwtCreatedEvent,
-    kNotificationEmailSend,
-    kProfileCreateEvent,
-    kProfileGetByUserIdEvent,
-    kRedisEqualEvent,
-    kRedisExistsEvent
-}
+export const kNotificationEmailSend = 'notification.email.send'

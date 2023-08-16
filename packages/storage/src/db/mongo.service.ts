@@ -22,4 +22,8 @@ export class MongoService {
         const createdFusion = new this.realtimeFusion(fusion)
         return createdFusion.save()
     }
+
+    async deleteFusionByClientId(clientId: string) {
+        await this.persistentFusion.deleteMany({ clientId: clientId })
+    }
 }

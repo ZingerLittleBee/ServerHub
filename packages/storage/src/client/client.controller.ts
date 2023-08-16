@@ -4,6 +4,7 @@ import { Controller } from '@nestjs/common'
 import { EventPattern, MessagePattern } from '@nestjs/microservices'
 import {
     kClientCreateMsg,
+    kClientDeleteEvent,
     kClientDeviceUpdateEvent,
     kClientDiskQueryById,
     kClientGetAll,
@@ -17,6 +18,7 @@ import {
     ClientStatus,
     CreateClientDto,
     CreateClientResult,
+    TokenPayload,
     UpdateDeviceDto
 } from '@server-octopus/types'
 import { ClientService } from './client.service'
@@ -53,7 +55,7 @@ export class ClientController {
         }
     }
 
-    @EventPattern(kClientDeviceUpdateEvent)
+    @MessagePattern(kClientDeviceUpdateEvent)
     async updateClientDevice(data: UpdateDeviceDto) {
         try {
             await this.clientService.updateClientDevice(data)
@@ -63,7 +65,7 @@ export class ClientController {
         }
     }
 
-    @EventPattern(kClientNetworkQueryById)
+    @MessagePattern(kClientNetworkQueryById)
     async queryClientNetworkById({
         clientId
     }: ClientNetworkQueryByIdPayload): Promise<ClientNetworkQueryByIdResult> {
@@ -76,7 +78,7 @@ export class ClientController {
         }
     }
 
-    @EventPattern(kClientDiskQueryById)
+    @MessagePattern(kClientDiskQueryById)
     async queryClientDiskById({
         clientId
     }: ClientNetworkQueryByIdPayload): Promise<ClientDiskQueryByIdResult> {
@@ -89,12 +91,17 @@ export class ClientController {
         }
     }
 
-    @EventPattern(kClientGetAll)
+    @MessagePattern(kClientGetAll)
     async getAll(): Promise<ClientGetAllResult> {
         try {
             return ResultUtil.ok(await this.clientService.getAll())
         } catch (e) {
             return ResultUtil.error(e)
         }
+    }
+
+    @EventPattern(kClientDeleteEvent)
+    async handleClientDelete({ clientId }: TokenPayload) {
+        await this.clientService.deleteClient(clientId)
     }
 }

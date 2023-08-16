@@ -1,7 +1,8 @@
 import { Controller } from '@nestjs/common'
 import { ClientService } from './client.service'
-import { MessagePattern } from '@nestjs/microservices'
+import { EventPattern, MessagePattern } from '@nestjs/microservices'
 import {
+    kClientDeleteEvent,
     kClientTokenSign,
     kClientTokenValid,
     kClientTokenVerify,
@@ -10,7 +11,8 @@ import {
 import {
     ClientPayload,
     ClientVerifyResult,
-    Result
+    Result,
+    TokenPayload
 } from '@server-octopus/types'
 
 @Controller()
@@ -46,5 +48,10 @@ export class ClientController {
         } catch (e) {
             return ResultUtil.error(e.message)
         }
+    }
+
+    @EventPattern(kClientDeleteEvent)
+    async handleClientDelete(tokenPayload: TokenPayload) {
+        await this.clientService.handleClientDelete(tokenPayload)
     }
 }

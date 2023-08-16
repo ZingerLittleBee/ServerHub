@@ -36,8 +36,9 @@ export class ExtraGuard implements CanActivate {
             if (success && data) {
                 request['clientId'] = data.clientId
                 request['userId'] = data.userId
+                return true
             }
-            return success
+            return false
         } catch (e) {
             this.logger.error(`verify token: ${token} error: ${e.message}`)
             return false
