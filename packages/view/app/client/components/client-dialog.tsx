@@ -2,6 +2,7 @@
 
 import React from "react"
 import Link from "next/link"
+import { deleteClientRequest } from "@/requests/client/client"
 
 import {
   AlertDialog,
@@ -69,6 +70,28 @@ export const cctTemplate = (
           description: `Token: ${token}`,
         })
       })
+  },
+})
+
+export const deleteConfirm = (
+  clientId: string,
+  title?: string
+): ClientDialogProps => ({
+  isOpen: true,
+  title: title ?? "Are you absolutely sure?",
+  description: (
+    <>
+      This action cannot be undone. This will permanently delete your client and
+      remove your data from our servers.
+    </>
+  ),
+  cancelText: "Cancel",
+  confirmText: "Confirm",
+  onConfirm: async () => {
+    await deleteClientRequest(clientId)
+    toast({
+      title: "Client will be delete soon later.",
+    })
   },
 })
 

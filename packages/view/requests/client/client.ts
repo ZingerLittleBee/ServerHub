@@ -1,4 +1,8 @@
-import { addClientUrl, getAllClientUrl } from "@/requests/endpoint"
+import {
+  addClientUrl,
+  deleteClientUrl,
+  getAllClientUrl,
+} from "@/requests/endpoint"
 import instance from "@/requests/instance"
 import {
   ClientVo,
@@ -44,5 +48,12 @@ export const getAllClientRequest = async (): Promise<Result<ClientVo[]>> => {
   return {
     ...data,
     data: data.data as ClientVo[],
+  }
+}
+
+export const deleteClientRequest = async (clientId: string) => {
+  const { data } = await instance.delete(`${deleteClientUrl}/${clientId}`)
+  return {
+    ...data,
   }
 }

@@ -1,8 +1,21 @@
 "use client"
 
+import { ReactNode } from "react"
+import { deleteClientRequest } from "@/requests/client/client"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { Row } from "@tanstack/react-table"
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -17,7 +30,10 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { cctTemplate } from "@/app/client/components/client-dialog"
+import {
+  cctTemplate,
+  deleteConfirm,
+} from "@/app/client/components/client-dialog"
 import { useClientStore } from "@/app/client/store"
 import { kOpenAlertDialog } from "@/app/client/store/dialog"
 
@@ -52,7 +68,7 @@ export function DataTableRowActions<TData>({
           onClick={() =>
             dialogDispatch({
               type: kOpenAlertDialog,
-              payload: cctTemplate(row.getValue("id")),
+              payload: cctTemplate(row.getValue("clientId")),
             })
           }
         >
@@ -73,7 +89,14 @@ export function DataTableRowActions<TData>({
           </DropdownMenuSubContent>
         </DropdownMenuSub>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() =>
+            dialogDispatch({
+              type: kOpenAlertDialog,
+              payload: deleteConfirm(row.getValue("clientId")),
+            })
+          }
+        >
           Delete
           <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
         </DropdownMenuItem>

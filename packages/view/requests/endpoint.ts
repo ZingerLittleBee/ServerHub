@@ -1,26 +1,15 @@
-const serverBasePath = "/s"
-const clientBasePath = "/c"
-const loginUrl = `${serverBasePath}/auth/login`
-const registerUrl = `${serverBasePath}/auth/register`
-const logoutUrl = `${serverBasePath}/auth/logout`
-const authCheckUrl = `${serverBasePath}/auth/check`
+export const serverBasePath = "/s"
+export const clientBasePath = "/c"
+export const loginUrl = `${serverBasePath}/auth/login`
+export const registerUrl = `${serverBasePath}/auth/register`
+export const logoutUrl = `${serverBasePath}/auth/logout`
+export const authCheckUrl = `${serverBasePath}/auth/check`
 
-const profileUrl = `${serverBasePath}/profile`
+export const profileUrl = `${serverBasePath}/profile`
 
-const addClientUrl = `${clientBasePath}/client`
-const getAllClientUrl = `${clientBasePath}/client`
+export const addClientUrl = `${clientBasePath}/client`
+export const getAllClientUrl = `${clientBasePath}/client`
+export const deleteClientUrl = `${clientBasePath}/client`
 
-const queryNetworkByClientIdUrl = `${clientBasePath}/device/network`
-const queryDiskByClientIdUrl = `${clientBasePath}/device/disk`
-
-export {
-    loginUrl,
-    registerUrl,
-    logoutUrl,
-    profileUrl,
-    addClientUrl,
-    authCheckUrl,
-    queryNetworkByClientIdUrl,
-    queryDiskByClientIdUrl,
-    getAllClientUrl
-}
+export const queryNetworkByClientIdUrl = `${clientBasePath}/device/network`
+export const queryDiskByClientIdUrl = `${clientBasePath}/device/disk`
