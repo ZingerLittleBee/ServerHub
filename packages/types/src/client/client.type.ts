@@ -1,4 +1,3 @@
-import { Os, Overview, Process, Realtime } from "../fusion.type";
 import { Result } from "../result.type";
 import { TokenPayload } from "../token/index";
 import { DeviceDto, DeviceVo } from "./device.type";
@@ -25,15 +24,6 @@ export type CreateClientVo = ClientVo & { token: string };
 export type CreateClientDto = {
     name: string;
     userId?: string;
-};
-
-export type FusionDto = {
-    overview: Overview;
-    os?: Os;
-    realtime?: Realtime;
-    fullProcess?: Process[];
-    clientId: string;
-    time: number;
 };
 
 export type ClientPayload = TokenPayload;

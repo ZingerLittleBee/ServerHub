@@ -26,7 +26,7 @@ import { ResultUtil } from '@server-octopus/shared'
 import { VerifyTokenGuard } from '@/guard/verify.guard'
 import { ExtraGuard } from '@/guard/extra.guard'
 import { ClientDataGuard } from '@/guard/data.guard'
-import { RawFusion } from '@/type'
+import { ReportRawData } from '@/type'
 
 @Controller('client')
 export class ClientController {
@@ -142,14 +142,14 @@ export class ClientController {
     @Post('data')
     async data(
         @Request() req: Request & ClientPayload,
-        @Body() { fusion, time }: RawFusion
+        @Body() { fusion, time }: ReportRawData
     ) {
         try {
-            await this.clientService.addPersistentData({
+            await this.clientService.addFusionData({
                 overview: fusion.overview,
                 os: fusion.os,
                 realtime: fusion.realtime,
-                fullProcess: fusion.full_process,
+                process: fusion.process,
                 clientId: req.clientId,
                 time: time
             })

@@ -1,8 +1,6 @@
 export const kJwtCreatedEvent = 'jwt.created'
 
-export const kFusionPersistentAddEvent = 'fusion.persistent.add'
-
-export const kFusionRealtimeAddEvent = 'fusion.realtime.add'
+export const kFusionAddEvent = 'fusion.add'
 
 export const kRedisEqualEvent = 'redis.equal'
 

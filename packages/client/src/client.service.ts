@@ -9,8 +9,7 @@ import {
     kClientTokenSign,
     kClientTokenValid,
     kClientUpdate,
-    kFusionPersistentAddEvent,
-    kFusionRealtimeAddEvent,
+    kFusionAddEvent,
     kStorageService
 } from '@server-octopus/shared'
 import { ClientProxy } from '@nestjs/microservices'
@@ -22,8 +21,10 @@ import {
     CreateClientResult,
     CreateDevice,
     DeviceDto,
+    DiskDetail,
     DiskDetailDto,
     FusionDto,
+    NetworkInfo,
     NetworkInfoDto,
     RegisterClientDto,
     Result,
@@ -89,12 +90,8 @@ export class ClientService {
         return data
     }
 
-    async addRealtimeData(fusion: FusionDto) {
-        this.storageClient.emit(kFusionRealtimeAddEvent, fusion)
-    }
-
-    async addPersistentData(fusion: FusionDto) {
-        this.storageClient.emit(kFusionPersistentAddEvent, fusion)
+    async addFusionData(fusion: FusionDto) {
+        this.storageClient.emit(kFusionAddEvent, fusion)
     }
 
     async create(client: CreateClientDto) {
@@ -161,7 +158,7 @@ export class ClientService {
             memory: formatDataToString(device.memory),
             swap: formatDataToString(device.swap),
             version: device.version,
-            disk: device.disk.map<DiskDetailDto>((disk) => ({
+            disk: device.disk.map<DiskDetailDto>((disk: DiskDetail) => ({
                 type: disk.disk_type,
                 name: disk.device_name,
                 file_system: disk.file_system,
@@ -169,12 +166,14 @@ export class ClientService {
                 available: formatDataToString(disk.available_space),
                 removeable: disk.is_removable
             })),
-            network: device.network.map<NetworkInfoDto>((network) => ({
-                name: network.name,
-                mac: network.mac,
-                rx: formatDataToString(network.rx),
-                tx: formatDataToString(network.tx)
-            }))
+            network: device.network.map<NetworkInfoDto>(
+                (network: NetworkInfo) => ({
+                    name: network.name,
+                    mac: network.mac,
+                    rx: formatDataToString(network.rx),
+                    tx: formatDataToString(network.tx)
+                })
+            )
         }
     }
 }

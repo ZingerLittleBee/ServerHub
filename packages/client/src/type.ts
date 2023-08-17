@@ -1,6 +1,6 @@
 import { Fusion } from '@server-octopus/types'
 
-export type RawFusion = {
+export type ReportRawData = {
     fusion: Fusion
     time: number
 }
