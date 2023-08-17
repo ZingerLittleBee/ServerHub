@@ -5,6 +5,8 @@ export const kClientGetAll = 'client.get.all'
 
 export const kClientDeleteEvent = 'client.delete'
 
+export const kClientUpdate = 'client.update'
+
 export const kClientDeviceUpdateEvent = 'client.device.update'
 
 export const kClientUpsertEvent = 'client.upsert'

@@ -7,6 +7,7 @@ import {
     CreateClientDto,
     DiskDetailDto,
     NetworkInfoDto,
+    UpdateClientDto,
     UpdateDeviceDto
 } from '@server-octopus/types'
 import { MongoService } from '@/db/mongo.service'
@@ -44,6 +45,25 @@ export class ClientService {
                 status: StatusEnum.UNKNOWN,
                 user_id: userId
             }
+        })
+    }
+
+    async updateClient({ clientId, name, status }: UpdateClientDto) {
+        const data: {
+            name?: string
+            status?: ClientStatus
+        } = {}
+        if (name) {
+            data['name'] = name
+        }
+        if (status) {
+            data['status'] = status
+        }
+        return this.prismaService.client.update({
+            where: {
+                client_id: clientId
+            },
+            data: data
         })
     }
 

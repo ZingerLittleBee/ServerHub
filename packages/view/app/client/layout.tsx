@@ -1,6 +1,7 @@
 import { Metadata } from "next"
 
 import { ClientStateProvider } from "@/app/client/store"
+import { ReactNode } from 'react'
 
 export const metadata: Metadata = {
   title: "Client",
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
 }
 
 interface ClientLayoutProps {
-  children: React.ReactNode
+  children: ReactNode
 }
 
 export default function ClientLayout({ children }: ClientLayoutProps) {

@@ -9,6 +9,7 @@ export const profileUrl = `${serverBasePath}/profile`
 
 export const addClientUrl = `${clientBasePath}/client`
 export const getAllClientUrl = `${clientBasePath}/client`
+export const updateClientUrl = `${clientBasePath}/client`
 export const deleteClientUrl = `${clientBasePath}/client`
 
 export const queryNetworkByClientIdUrl = `${clientBasePath}/device/network`

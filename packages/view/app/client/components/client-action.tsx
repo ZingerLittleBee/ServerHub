@@ -4,7 +4,6 @@ import * as React from "react"
 import { useState } from "react"
 import { addClientRequest } from "@/requests/client/client"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { PlusCircle } from "lucide-react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 
@@ -16,7 +15,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
 import {
   Form,
@@ -30,17 +28,26 @@ import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
 import { Icons } from "@/components/icons"
 import {
-  ClientDialog,
+  ClientAlertDialog,
   cctTemplate,
-} from "@/app/client/components/client-dialog"
+} from "@/app/client/components/client-alert-dialog"
 import { useClientStore } from "@/app/client/store"
-import { kOpenAlertDialog } from "@/app/client/store/dialog"
+import { kOpenAlertDialog, kSetDialogIsOpen } from "@/app/client/store/dialog"
 
-export function AddClient() {
+export enum ClientActionEnum {
+  ADD,
+  EDIT,
+}
+
+export type ClientActionProps = {
+  action?: ClientActionEnum
+}
+
+export function ClientAction() {
   const { toast } = useToast()
-  const [isOpen, setIsOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const { dialogDispatch } = useClientStore()
+  const { dialogState, dialogDispatch } = useClientStore()
+  const { isDialogOpen, dialogProps } = dialogState
 
   const formSchema = z.object({
     name: z.string().nonempty({ message: "Not Empty" }).trim(),
@@ -56,44 +63,72 @@ export function AddClient() {
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsLoading(true)
-    const {
-      success,
-      data: clientVo,
-      message,
-    } = await addClientRequest(data.name)
-    if (success) {
-      toast({
-        title: "Client added successfully.",
-      })
-    } else {
-      toast({
-        variant: "destructive",
-        title: "Uh oh! Something went wrong.",
-        description: message,
-      })
-      return
+    switch (action) {
+      case ClientActionEnum.ADD:
+        const {
+          success,
+          data: clientVo,
+          message,
+        } = await addClientRequest(data.name)
+        success
+          ? toast({
+              title: "Client added successfully.",
+            })
+          : toast({
+              variant: "destructive",
+              title: "Uh oh! Something went wrong.",
+              description: message,
+            })
+        if (success && clientVo) {
+          dialogDispatch({
+            type: kOpenAlertDialog,
+            payload: cctTemplate(clientVo?.token ?? ""),
+          })
+        }
+        break
+      case ClientActionEnum.EDIT:
+        const { success: editSuccess, message: editMessage } =
+          await addClientRequest(data.name)
+        editSuccess
+          ? toast({
+              title: "Client edit successfully.",
+            })
+          : toast({
+              variant: "destructive",
+              title: "Uh oh! Something went wrong.",
+              description: editMessage,
+            })
+        break
     }
     setIsLoading(false)
-    setIsOpen(false)
     dialogDispatch({
-      type: kOpenAlertDialog,
-      payload: cctTemplate(clientVo?.token ?? ""),
+      type: kSetDialogIsOpen,
+      payload: false,
     })
   }
 
+  let action = dialogProps.action
+
   return (
     <>
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogTrigger asChild>
-          <Button className="h-[32px]">
-            <PlusCircle className="mr-2 h-4 w-4" /> Add Client
-          </Button>
-        </DialogTrigger>
+      <Dialog
+        open={isDialogOpen}
+        onOpenChange={(open: boolean) =>
+          dialogDispatch({
+            type: kSetDialogIsOpen,
+            payload: open,
+          })
+        }
+      >
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Add Client</DialogTitle>
+            <DialogTitle>
+              {action === ClientActionEnum.ADD ? "Add Client" : "Edit Client"}
+            </DialogTitle>
             <DialogDescription>
-              {"Add Client here. Click save when you're done."}
+              {action === ClientActionEnum.ADD
+                ? "Add Client here. Click save when you're done."
+                : "Edit Client here. Click save when you're done."}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -135,7 +170,7 @@ export function AddClient() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      <ClientDialog />
+      <ClientAlertDialog />
     </>
   )
 }

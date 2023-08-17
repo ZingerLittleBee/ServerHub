@@ -1,16 +1,23 @@
 "use client"
 
+import * as React from "react"
 import { Cross2Icon } from "@radix-ui/react-icons"
 import { Table } from "@tanstack/react-table"
 import { PlusCircle } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import {
+  ClientAction,
+  ClientActionEnum,
+} from "@/app/client/components/client-action"
+import { ClientAlertDialog } from "@/app/client/components/client-alert-dialog"
+import { useClientStore } from "@/app/client/store"
+import { kOpenDialog } from "@/app/client/store/dialog"
 
-import { priorities, statuses } from "../data/data"
+import { statuses } from "../data/data"
 import { DataTableFacetedFilter } from "./data-table-faceted-filter"
 import { DataTableViewOptions } from "./data-table-view-options"
-import { AddClient } from "@/app/client/components/add-client";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>
@@ -20,6 +27,7 @@ export function DataTableToolbar<TData>({
   table,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0
+  const { dialogDispatch } = useClientStore()
 
   return (
     <div className="flex items-center justify-between">
@@ -51,7 +59,23 @@ export function DataTableToolbar<TData>({
           </Button>
         )}
       </div>
-        <AddClient />
+      <Button
+        className="h-[32px]"
+        onClick={() => {
+          console.log("open")
+          dialogDispatch({
+            type: kOpenDialog,
+            payload: {
+              action: ClientActionEnum.ADD,
+            },
+          })
+        }}
+      >
+        <PlusCircle className="mr-2 h-4 w-4" />
+        Add Client
+      </Button>
+      <ClientAction />
+      <ClientAlertDialog />
     </div>
   )
 }

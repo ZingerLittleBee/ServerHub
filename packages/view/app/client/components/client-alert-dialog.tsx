@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { toast } from "@/components/ui/use-toast"
 import { useClientStore } from "@/app/client/store"
-import { kSetDialogIsOpen } from "@/app/client/store/dialog"
+import { kSetAlertDialogIsOpen } from "@/app/client/store/dialog"
 
 export interface ClientDialogProps {
   isOpen: boolean
@@ -95,30 +95,32 @@ export const deleteConfirm = (
   },
 })
 
-export function ClientDialog() {
+export function ClientAlertDialog() {
   const { dialogState, dialogDispatch } = useClientStore()
 
-  const { isOpen, props } = dialogState
+  const { isAlertDialogOpen, alertDialogProps } = dialogState
 
   return (
     <AlertDialog
-      open={isOpen}
+      open={isAlertDialogOpen}
       onOpenChange={(open: boolean) =>
         dialogDispatch({
-          type: kSetDialogIsOpen,
+          type: kSetAlertDialogIsOpen,
           payload: open,
         })
       }
     >
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{props.title}</AlertDialogTitle>
-          <AlertDialogDescription>{props.description}</AlertDialogDescription>
+          <AlertDialogTitle>{alertDialogProps.title}</AlertDialogTitle>
+          <AlertDialogDescription>
+            {alertDialogProps.description}
+          </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>{props.cancelText}</AlertDialogCancel>
-          <AlertDialogAction onClick={props.onConfirm}>
-            {props.confirmText}
+          <AlertDialogCancel>{alertDialogProps.cancelText}</AlertDialogCancel>
+          <AlertDialogAction onClick={alertDialogProps.onConfirm}>
+            {alertDialogProps.confirmText}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

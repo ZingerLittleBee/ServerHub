@@ -6,6 +6,7 @@ import {
     HttpCode,
     Logger,
     Param,
+    Patch,
     Post,
     Request,
     UseGuards
@@ -42,6 +43,22 @@ export class ClientController {
         } catch (e) {
             this.logger.error(`Get all client error: ${e.message}`)
             return ResultUtil.error('Get all client error')
+        }
+    }
+
+    @UseGuards(VerifyTokenGuard)
+    @Patch(':clientId')
+    async update(
+        @Param('clientId') clientId: string,
+        @Body() { name }: { name: string }
+    ) {
+        try {
+            await this.clientService.update({
+                name,
+                clientId
+            })
+        } catch (e) {
+            this.logger.error(`Update client error: ${e.message}`)
         }
     }
 

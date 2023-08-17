@@ -1,21 +1,8 @@
 "use client"
 
-import { ReactNode } from "react"
-import { deleteClientRequest } from "@/requests/client/client"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { Row } from "@tanstack/react-table"
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -30,12 +17,14 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { ClientActionEnum } from "@/app/client/components/client-action"
 import {
   cctTemplate,
   deleteConfirm,
-} from "@/app/client/components/client-dialog"
+  updateClientTemplate,
+} from "@/app/client/components/client-alert-dialog"
 import { useClientStore } from "@/app/client/store"
-import { kOpenAlertDialog } from "@/app/client/store/dialog"
+import { kOpenAlertDialog, kOpenDialog } from "@/app/client/store/dialog"
 
 import { labels } from "../data/data"
 import { clientSchema } from "../data/schema"
@@ -62,7 +51,18 @@ export function DataTableRowActions<TData>({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
-        <DropdownMenuItem>Edit</DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() =>
+            dialogDispatch({
+              type: kOpenDialog,
+              payload: {
+                action: ClientActionEnum.EDIT,
+              },
+            })
+          }
+        >
+          Edit
+        </DropdownMenuItem>
         <DropdownMenuItem>Make a copy</DropdownMenuItem>
         <DropdownMenuItem
           onClick={() =>

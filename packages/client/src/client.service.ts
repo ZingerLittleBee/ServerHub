@@ -8,6 +8,7 @@ import {
     kClientGetAll,
     kClientTokenSign,
     kClientTokenValid,
+    kClientUpdate,
     kFusionPersistentAddEvent,
     kFusionRealtimeAddEvent,
     kStorageService
@@ -26,6 +27,7 @@ import {
     NetworkInfoDto,
     RegisterClientDto,
     Result,
+    UpdateClientDto,
     UpdateDeviceDto
 } from '@server-octopus/types'
 import { firstValueFrom } from 'rxjs'
@@ -109,6 +111,23 @@ export class ClientService {
             throw new Error(message)
         }
         return data
+    }
+
+    async update(updateClientDto: UpdateClientDto) {
+        const { success, message } = await firstValueFrom(
+            this.storageClient.send<Result, UpdateClientDto>(
+                kClientUpdate,
+                updateClientDto
+            )
+        )
+        if (!success) {
+            this.logger.error(
+                `Update client: ${inspect(
+                    updateClientDto
+                )} error, message: ${message}`
+            )
+            throw new Error(message)
+        }
     }
 
     async signToken(userId: string, clientId: string): Promise<string> {

@@ -2,6 +2,7 @@ import {
   addClientUrl,
   deleteClientUrl,
   getAllClientUrl,
+  updateClientUrl,
 } from "@/requests/endpoint"
 import instance from "@/requests/instance"
 import {
@@ -48,6 +49,17 @@ export const getAllClientRequest = async (): Promise<Result<ClientVo[]>> => {
   return {
     ...data,
     data: data.data as ClientVo[],
+  }
+}
+
+export const updateClientRequest = async (
+  clientId: string
+): Promise<Result> => {
+  const { data } = await instance.patch<Result>(
+    `${updateClientUrl}/${clientId}`
+  )
+  return {
+    ...data,
   }
 }
 

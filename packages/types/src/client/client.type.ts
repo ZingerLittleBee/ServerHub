@@ -27,11 +27,6 @@ export type CreateClientDto = {
     userId?: string;
 };
 
-export type UpdateClientDto = {
-    name?: string;
-    device?: DeviceDto;
-};
-
 export type FusionDto = {
     overview: Overview;
     os?: Os;
@@ -63,3 +58,6 @@ export type ClientDto = {
     lastCommunication: Date;
 };
 
+export type UpdateClientDto = Partial<
+    Omit<ClientDto, "lastCommunication" | "clientId">
+> & { clientId: string };

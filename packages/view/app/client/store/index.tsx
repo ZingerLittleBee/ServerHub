@@ -2,7 +2,8 @@
 
 import React, { ReactNode, createContext, useContext, useReducer } from "react"
 
-import { ClientDialogProps } from "@/app/client/components/client-dialog"
+import { ClientActionProps } from "@/app/client/components/client-action"
+import { ClientDialogProps } from "@/app/client/components/client-alert-dialog"
 import {
   DialogAction,
   DialogState,
@@ -26,8 +27,10 @@ const ClientStateProvider = ({
   children,
 }: ClientStateProviderProps): React.JSX.Element => {
   const [dialogState, dialogDispatch] = useReducer(dialogReducer, {
-    isOpen: false,
-    props: {} as ClientDialogProps,
+    isAlertDialogOpen: false,
+    alertDialogProps: {} as ClientDialogProps,
+    isDialogOpen: false,
+    dialogProps: {} as ClientActionProps,
   })
 
   return (

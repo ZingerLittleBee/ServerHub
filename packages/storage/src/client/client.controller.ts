@@ -8,7 +8,8 @@ import {
     kClientDeviceUpdateEvent,
     kClientDiskQueryById,
     kClientGetAll,
-    kClientNetworkQueryById
+    kClientNetworkQueryById,
+    kClientUpdate
 } from '@server-octopus/shared'
 import {
     ClientDiskQueryByIdResult,
@@ -19,6 +20,7 @@ import {
     CreateClientDto,
     CreateClientResult,
     TokenPayload,
+    UpdateClientDto,
     UpdateDeviceDto
 } from '@server-octopus/types'
 import { ClientService } from './client.service'
@@ -103,5 +105,15 @@ export class ClientController {
     @EventPattern(kClientDeleteEvent)
     async handleClientDelete({ clientId }: TokenPayload) {
         await this.clientService.deleteClient(clientId)
+    }
+
+    @MessagePattern(kClientUpdate)
+    async updateClient(client: UpdateClientDto) {
+        try {
+            await this.clientService.updateClient(client)
+            return ResultUtil.ok()
+        } catch (e) {
+            return ResultUtil.error(e)
+        }
     }
 }
