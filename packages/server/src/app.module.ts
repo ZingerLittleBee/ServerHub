@@ -3,7 +3,6 @@ import { UserModule } from './user/user.module'
 import { AuthModule } from './auth/auth.module'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { ProfileModule } from './profile/profile.module'
-import { TaskModule } from './task/task.module'
 import { ScheduleModule } from '@nestjs/schedule'
 import { ClientsModule, Transport } from '@nestjs/microservices'
 import {
@@ -51,8 +50,7 @@ import {
         ScheduleModule.forRoot(),
         UserModule,
         AuthModule,
-        ProfileModule,
-        TaskModule
+        ProfileModule
     ]
 })
 export class AppModule {}
